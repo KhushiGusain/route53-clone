@@ -5,12 +5,14 @@ import TopNav from "./TopNav";
 
 type AppLayoutProps = {
   children: ReactNode;
+  breadcrumbZone?: { id: number; name: string };
   breadcrumbTail?: string;
   showSidebar?: boolean;
 };
 
 export default function AppLayout({
   children,
+  breadcrumbZone,
   breadcrumbTail,
   showSidebar = true,
 }: AppLayoutProps) {
@@ -25,7 +27,7 @@ export default function AppLayout({
               Route 53
             </span>
             <span>›</span>
-            {breadcrumbTail ? (
+            {breadcrumbTail || breadcrumbZone ? (
               <>
                 <Link
                   href="/hosted-zones"
@@ -33,8 +35,23 @@ export default function AppLayout({
                 >
                   Hosted zones
                 </Link>
-                <span>›</span>
-                <span className="text-aws-nav-text">{breadcrumbTail}</span>
+                {breadcrumbZone && (
+                  <>
+                    <span>›</span>
+                    <Link
+                      href={`/hosted-zones/${breadcrumbZone.id}`}
+                      className="transition-colors hover:text-aws-link hover:underline"
+                    >
+                      {breadcrumbZone.name}
+                    </Link>
+                  </>
+                )}
+                {breadcrumbTail && (
+                  <>
+                    <span>›</span>
+                    <span className="text-aws-nav-text">{breadcrumbTail}</span>
+                  </>
+                )}
               </>
             ) : (
               <span className="text-aws-nav-text">Hosted zones</span>

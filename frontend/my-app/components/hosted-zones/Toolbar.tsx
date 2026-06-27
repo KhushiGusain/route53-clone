@@ -1,10 +1,21 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { RefreshCw } from "lucide-react";
 
 const secondaryClass =
   "inline-flex h-7 items-center rounded border border-aws-main-border bg-transparent px-3 text-ui font-normal text-aws-main-text transition-colors hover:bg-aws-main-elevated disabled:cursor-not-allowed disabled:text-aws-main-text-muted disabled:opacity-60";
 
-export default function Toolbar() {
+type ToolbarProps = {
+  selectedZoneId: number | null;
+  onDeleteClick: () => void;
+};
+
+export default function Toolbar({ selectedZoneId, onDeleteClick }: ToolbarProps) {
+  const router = useRouter();
+  const disabled = selectedZoneId === null;
+
   return (
     <div
       className="mt-0.5 flex shrink-0 flex-nowrap items-center gap-1.5"
@@ -19,13 +30,30 @@ export default function Toolbar() {
         <RefreshCw className="h-3.5 w-3.5" />
       </button>
 
-      <button type="button" className={secondaryClass} disabled>
+      <button
+        type="button"
+        className={secondaryClass}
+        disabled={disabled}
+        onClick={() => router.push(`/hosted-zones/${selectedZoneId}`)}
+      >
         View details
       </button>
-      <button type="button" className={secondaryClass} disabled>
+
+      <button
+        type="button"
+        className={secondaryClass}
+        disabled={disabled}
+        onClick={() => router.push(`/hosted-zones/${selectedZoneId}/edit`)}
+      >
         Edit
       </button>
-      <button type="button" className={secondaryClass} disabled>
+
+      <button
+        type="button"
+        className={secondaryClass}
+        disabled={disabled}
+        onClick={onDeleteClick}
+      >
         Delete
       </button>
 

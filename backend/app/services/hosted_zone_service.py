@@ -39,6 +39,10 @@ def get_all_hosted_zones(db: Session) -> list[HostedZone]:
     return db.query(HostedZone).order_by(HostedZone.created_at.desc()).all()
 
 
+def get_hosted_zone_by_id(db: Session, zone_id: int) -> HostedZone | None:
+    return db.query(HostedZone).filter(HostedZone.id == zone_id).first()
+
+
 def update_hosted_zone(
     db: Session, zone_id: int, zone_data: HostedZoneUpdate
 ) -> HostedZone | None:

@@ -2,9 +2,15 @@ import Toolbar from "./Toolbar";
 
 type PageHeaderProps = {
   zoneCount: number;
+  selectedZoneId: number | null;
+  onDeleteClick: () => void;
 };
 
-export default function PageHeader({ zoneCount }: PageHeaderProps) {
+export default function PageHeader({
+  zoneCount,
+  selectedZoneId,
+  onDeleteClick,
+}: PageHeaderProps) {
   return (
     <section>
       <div className="flex items-start justify-between gap-4">
@@ -19,7 +25,7 @@ export default function PageHeader({ zoneCount }: PageHeaderProps) {
             Automatic mode is the current search behavior optimized for best filter results.
           </p>
         </div>
-        <Toolbar />
+        <Toolbar selectedZoneId={selectedZoneId} onDeleteClick={onDeleteClick} />
       </div>
     </section>
   );

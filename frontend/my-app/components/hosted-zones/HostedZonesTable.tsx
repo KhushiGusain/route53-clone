@@ -1,3 +1,5 @@
+"use client";
+
 import type { HostedZone } from "@/lib/types";
 
 const columns = [
@@ -16,9 +18,15 @@ const td =
 
 type HostedZonesTableProps = {
   zones: HostedZone[];
+  selectedZoneId: number | null;
+  onSelectZone: (zoneId: number) => void;
 };
 
-export default function HostedZonesTable({ zones }: HostedZonesTableProps) {
+export default function HostedZonesTable({
+  zones,
+  selectedZoneId,
+  onSelectZone,
+}: HostedZonesTableProps) {
   return (
     <section className="flex-1 overflow-x-auto">
       <table className="w-full min-w-[860px] border-collapse text-left">
@@ -36,14 +44,18 @@ export default function HostedZonesTable({ zones }: HostedZonesTableProps) {
           {zones.map((zone) => (
             <tr
               key={zone.id}
-              className="transition-colors hover:bg-aws-main-elevated/40"
+              className={`transition-colors hover:bg-aws-main-elevated/40 ${
+                selectedZoneId === zone.id ? "bg-aws-main-elevated/50" : ""
+              }`}
             >
               <td className={`${td} align-middle`}>
                 <input
                   type="radio"
                   name="hosted-zone"
-                  className="h-3.5 w-3.5 accent-aws-accent"
-                  readOnly
+                  checked={selectedZoneId === zone.id}
+                  onChange={() => onSelectZone(zone.id)}
+                  className="h-3.5 w-3.5 cursor-pointer accent-aws-accent"
+                  aria-label={`Select ${zone.name}`}
                 />
               </td>
               <td className={td}>

@@ -38,6 +38,17 @@ def create_hosted_zone(
     return hosted_zone_service.create_hosted_zone(db, zone_data)
 
 
+@router.get("/hosted-zones/{zone_id}", response_model=HostedZoneResponse)
+def get_hosted_zone(zone_id: int, db: Session = Depends(get_db)):
+    hosted_zone = hosted_zone_service.get_hosted_zone_by_id(db, zone_id)
+    if not hosted_zone:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Hosted zone not found",
+        )
+    return hosted_zone
+
+
 @router.put("/hosted-zones/{zone_id}", response_model=HostedZoneResponse)
 def update_hosted_zone(
     zone_id: int,
