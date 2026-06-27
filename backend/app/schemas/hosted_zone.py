@@ -1,17 +1,20 @@
 from datetime import datetime
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict
+
+ZoneType = Literal["Public", "Private"]
 
 
 class HostedZoneCreate(BaseModel):
     name: str
-    type: str = "Public"
+    type: ZoneType = "Public"
     description: str | None = None
 
 
 class HostedZoneUpdate(BaseModel):
     name: str | None = None
-    type: str | None = None
+    type: ZoneType | None = None
     description: str | None = None
 
 
@@ -20,7 +23,7 @@ class HostedZoneResponse(BaseModel):
 
     id: int
     name: str
-    type: str
+    type: ZoneType
     description: str | None
     created_by: str
     hosted_zone_id: str

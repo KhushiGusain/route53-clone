@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { RefreshCw } from "lucide-react";
 
 const secondaryClass =
@@ -28,12 +29,12 @@ export default function Toolbar() {
         Delete
       </button>
 
-      <button
-        type="button"
+      <Link
+        href="/hosted-zones/create"
         className="ml-1 inline-flex h-7 shrink-0 items-center rounded bg-aws-orange px-3 text-ui font-semibold text-aws-nav transition-opacity hover:opacity-90"
       >
         Create hosted zone
-      </button>
+      </Link>
     </div>
   );
 }
