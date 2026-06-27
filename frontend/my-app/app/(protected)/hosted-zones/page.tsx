@@ -1,7 +1,18 @@
+import AppLayout from "@/components/layout/AppLayout";
+import HostedZonesTable from "@/components/hosted-zones/HostedZonesTable";
+import PageHeader from "@/components/hosted-zones/PageHeader";
+import Pagination from "@/components/hosted-zones/Pagination";
+import SearchBar from "@/components/hosted-zones/SearchBar";
+import Toolbar from "@/components/hosted-zones/Toolbar";
+
 export default function HostedZonesPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-50">
-      <h1 className="text-3xl font-semibold text-gray-900">Hosted Zones</h1>
-    </main>
+    <AppLayout>
+      <PageHeader />
+      <Toolbar />
+      <SearchBar />
+      <HostedZonesTable />
+      <Pagination />
+    </AppLayout>
   );
 }
