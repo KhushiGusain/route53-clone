@@ -1,1 +1,50 @@
 @import "tailwindcss";
+
+@theme {
+  --color-aws-nav: #16191f;
+  --color-aws-sidebar: #1b232f;
+  --color-aws-sidebar-hover: #232f3e;
+  --color-aws-nav-border: #3b4752;
+  --color-aws-nav-panel: #232f3e;
+  --color-aws-nav-border-strong: #545b64;
+  --color-aws-nav-text: #eaecee;
+  --color-aws-nav-text-body: #d5dbdb;
+  --color-aws-nav-text-muted: #879596;
+
+  --color-aws-main: #16191f;
+  --color-aws-main-elevated: #232f3e;
+  --color-aws-main-border: #3b4752;
+  --color-aws-main-text: #eaecee;
+  --color-aws-main-text-secondary: #879596;
+  --color-aws-main-text-muted: #687078;
+
+  --color-aws-link: #44b4ff;
+  --color-aws-accent: #0972d3;
+  --color-aws-orange: #ff9900;
+
+  --text-page-title: 1.75rem;
+  --text-page-title--line-height: 2.125rem;
+  --text-page-title--font-weight: 300;
+  --text-body: 0.875rem;
+  --text-body--line-height: 1.25rem;
+  --text-ui: 0.8125rem;
+  --text-ui--line-height: 1.125rem;
+  --text-table-header: 0.75rem;
+  --text-table-header--line-height: 1rem;
+  --text-table: 0.6875rem;
+  --text-table--line-height: 1rem;
+}
+
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+}

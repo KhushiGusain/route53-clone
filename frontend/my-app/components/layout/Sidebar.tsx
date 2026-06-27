@@ -1,29 +1,37 @@
+function NavLink({ label, active = false }: { label: string; active?: boolean }) {
+  return (
+    <span
+      className={`relative block py-1.5 pl-4 pr-3 text-ui leading-5 transition-colors ${
+        active
+          ? "font-semibold text-aws-link before:absolute before:inset-y-1 before:left-0 before:w-0.5 before:rounded-full before:bg-aws-link"
+          : "text-aws-nav-text-body hover:bg-aws-sidebar-hover hover:text-aws-nav-text"
+      }`}
+    >
+      {label}
+    </span>
+  );
+}
+
 const navItems = [
-  "Dashboard",
-  "Hosted zones",
-  "Health checks",
-  "Profiles",
+  { label: "Dashboard" },
+  { label: "Hosted zones", active: true },
+  { label: "Health checks" },
+  { label: "Profiles" },
 ];
 
 export default function Sidebar() {
   return (
-    <aside className="hidden w-56 shrink-0 border-r border-gray-200 bg-gray-50 md:block">
-      <nav className="p-4">
-        <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-gray-500">
+    <aside className="hidden w-64 shrink-0 flex-col bg-aws-sidebar md:flex">
+      <div className="px-5 pb-1 pt-4">
+        <h2 className="text-ui font-bold tracking-tight text-aws-nav-text">
           Route 53
-        </p>
-        <ul className="space-y-1">
+        </h2>
+      </div>
+      <nav className="flex-1 px-2 pb-6 pt-1">
+        <ul>
           {navItems.map((item) => (
-            <li key={item}>
-              <span
-                className={`block rounded px-3 py-2 text-sm ${
-                  item === "Hosted zones"
-                    ? "bg-blue-100 font-medium text-blue-800"
-                    : "text-gray-700"
-                }`}
-              >
-                {item}
-              </span>
+            <li key={item.label}>
+              <NavLink {...item} />
             </li>
           ))}
         </ul>

@@ -1,18 +1,39 @@
+import { RefreshCw } from "lucide-react";
+
+const secondaryClass =
+  "inline-flex h-7 items-center rounded border border-aws-main-border bg-transparent px-3 text-ui font-normal text-aws-main-text transition-colors hover:bg-aws-main-elevated disabled:cursor-not-allowed disabled:text-aws-main-text-muted disabled:opacity-60";
+
 export default function Toolbar() {
   return (
-    <section className="flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 px-4 py-3 sm:px-6">
-      <div className="flex flex-wrap gap-2">
-        <span className="rounded border border-gray-300 px-3 py-1.5 text-sm text-gray-600">
-          View details
-        </span>
-        <span className="rounded border border-gray-300 px-3 py-1.5 text-sm text-gray-600">
-          Edit
-        </span>
-        <span className="rounded border border-gray-300 px-3 py-1.5 text-sm text-gray-600">
-          Delete
-        </span>
-      </div>
-      <span className="text-sm text-gray-500">Toolbar</span>
-    </section>
+    <div
+      className="mt-0.5 flex shrink-0 flex-nowrap items-center gap-1.5"
+      role="toolbar"
+      aria-label="Hosted zones actions"
+    >
+      <button
+        type="button"
+        className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-aws-main-border bg-transparent text-aws-link transition-colors hover:bg-aws-main-elevated"
+        aria-label="Refresh"
+      >
+        <RefreshCw className="h-3.5 w-3.5" />
+      </button>
+
+      <button type="button" className={secondaryClass} disabled>
+        View details
+      </button>
+      <button type="button" className={secondaryClass} disabled>
+        Edit
+      </button>
+      <button type="button" className={secondaryClass} disabled>
+        Delete
+      </button>
+
+      <button
+        type="button"
+        className="ml-1 inline-flex h-7 shrink-0 items-center rounded bg-aws-orange px-3 text-ui font-semibold text-aws-nav transition-opacity hover:opacity-90"
+      >
+        Create hosted zone
+      </button>
+    </div>
   );
 }

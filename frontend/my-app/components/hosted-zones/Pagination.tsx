@@ -1,15 +1,29 @@
+import { ChevronLeft, ChevronRight, Settings2 } from "lucide-react";
+
+const pageBtn =
+  "inline-flex h-7 w-7 items-center justify-center rounded border border-aws-main-border/70 bg-transparent text-aws-main-text-secondary transition-colors hover:bg-aws-main-elevated disabled:cursor-not-allowed disabled:opacity-40";
+
 export default function Pagination() {
   return (
-    <section className="mt-auto flex items-center justify-end gap-2 border-t border-gray-200 px-4 py-3 sm:px-6">
-      <span className="text-sm text-gray-500">Page 1 of 1</span>
-      <div className="flex gap-1">
-        <span className="rounded border border-gray-300 px-2 py-1 text-sm text-gray-600">
-          Prev
+    <section className="flex shrink-0 items-center gap-1.5">
+      <div className="flex items-center">
+        <button type="button" className={pageBtn} disabled aria-label="Previous page">
+          <ChevronLeft className="h-3.5 w-3.5" />
+        </button>
+        <span className="inline-flex h-7 min-w-7 items-center justify-center border-y border-aws-accent bg-aws-accent px-2 text-ui font-medium text-white">
+          1
         </span>
-        <span className="rounded border border-gray-300 px-2 py-1 text-sm text-gray-600">
-          Next
-        </span>
+        <button type="button" className={pageBtn} disabled aria-label="Next page">
+          <ChevronRight className="h-3.5 w-3.5" />
+        </button>
       </div>
+      <button
+        type="button"
+        className="inline-flex h-7 w-7 items-center justify-center rounded border border-aws-main-border/70 bg-transparent text-aws-main-text-secondary transition-colors hover:bg-aws-main-elevated"
+        aria-label="Table preferences"
+      >
+        <Settings2 className="h-3.5 w-3.5" />
+      </button>
     </section>
   );
 }
