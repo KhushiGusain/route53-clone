@@ -30,7 +30,7 @@ A full-stack DNS management console inspired by AWS Route 53. Create hosted zone
 | **Frontend** | https://route53-clone-phi.vercel.app/login |
 | **Swagger API Docs** | https://route53-backend-gq8z.onrender.com/docs |
 
-**Note:** **The initial load may take a few minutes because of the hosting setup. If the issue persists, refresh the page and try again.**
+**Note:** **The first login may take a few minutes because of the hosting setup. If the issue persists, refresh the page and try again.**
 
 ---
 
