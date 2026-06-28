@@ -21,8 +21,8 @@ class DNSRecordCreate(BaseModel):
 
 
 class DNSRecordUpdate(BaseModel):
-    name: str | None = None
-    type: RecordType | None = None
+    model_config = ConfigDict(extra="forbid")
+
     value: str | None = None
     ttl: int | None = None
 

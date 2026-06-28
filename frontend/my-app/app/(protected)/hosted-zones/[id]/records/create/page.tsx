@@ -1,16 +1,42 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import RecordForm, {
   createEmptyRecord,
   type RecordFormData,
+  type RecordFormErrors,
 } from "@/components/hosted-zones/RecordForm";
+import api from "@/lib/api";
 import type { HostedZone } from "@/lib/types";
 
+function validateRecord(record: RecordFormData): RecordFormErrors {
+  const errors: RecordFormErrors = {};
+
+  if (!record.recordType) {
+    errors.recordType = "Record type is required.";
+  }
+
+  if (!record.value.trim()) {
+    errors.value = "Value is required.";
+  }
+
+  const ttl = Number(record.ttl);
+  if (!record.ttl.trim() || Number.isNaN(ttl) || ttl < 1) {
+    errors.ttl = "TTL is required and must be a positive number.";
+  }
+
+  return errors;
+}
+
+function hasValidationErrors(errors: RecordFormErrors) {
+  return Object.keys(errors).length > 0;
+}
+
 export default function CreateRecordPage() {
+  const router = useRouter();
   const params = useParams();
   const zoneId = Number(params.id);
 
@@ -21,6 +47,11 @@ export default function CreateRecordPage() {
     createEmptyRecord(1),
   ]);
   const [nextRecordId, setNextRecordId] = useState(2);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<
+    Record<number, RecordFormErrors>
+  >({});
 
   useEffect(() => {
     async function fetchHostedZone() {
@@ -66,6 +97,59 @@ export default function CreateRecordPage() {
         record.id === id ? { ...record, ...updates } : record
       )
     );
+
+    if (fieldErrors[id]) {
+      setFieldErrors((prev) => {
+        const next = { ...prev };
+        delete next[id];
+        return next;
+      });
+    }
+  }
+
+  async function handleCreateRecords() {
+    setSubmitError("");
+
+    const nextFieldErrors: Record<number, RecordFormErrors> = {};
+    records.forEach((record) => {
+      const errors = validateRecord(record);
+      if (hasValidationErrors(errors)) {
+        nextFieldErrors[record.id] = errors;
+      }
+    });
+
+    if (Object.keys(nextFieldErrors).length > 0) {
+      setFieldErrors(nextFieldErrors);
+      setSubmitError("Please fix the errors below before creating records.");
+      return;
+    }
+
+    if (!zone) {
+      return;
+    }
+
+    setSubmitting(true);
+
+    try {
+      await Promise.all(
+        records.map((record) =>
+          api.createDnsRecord(zone.id, {
+            name: record.recordName.trim() || "@",
+            type: record.recordType,
+            value: record.value.trim(),
+            ttl: Number(record.ttl),
+          })
+        )
+      );
+
+      router.push(
+        `/hosted-zones/${zone.id}?recordsCreated=${records.length}`
+      );
+    } catch {
+      setSubmitError("Failed to create one or more records. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (loading) {
@@ -126,6 +210,7 @@ export default function CreateRecordPage() {
                   record={record}
                   zoneName={zone.name}
                   showDelete={records.length > 1}
+                  errors={fieldErrors[record.id]}
                   onChange={(updates) => updateRecord(record.id, updates)}
                   onDelete={() => removeRecord(record.id)}
                 />
@@ -136,12 +221,19 @@ export default function CreateRecordPage() {
               <button
                 type="button"
                 onClick={addRecord}
-                className="inline-flex h-7 items-center rounded border border-aws-accent bg-transparent px-3 text-ui font-normal text-aws-link transition-colors hover:bg-aws-main-elevated"
+                disabled={submitting}
+                className="inline-flex h-7 items-center rounded border border-aws-accent bg-transparent px-3 text-ui font-normal text-aws-link transition-colors hover:bg-aws-main-elevated disabled:cursor-not-allowed disabled:opacity-60"
               >
                 Add another record
               </button>
             </div>
           </section>
+
+          {submitError && (
+            <p className="text-ui text-red-400" role="alert">
+              {submitError}
+            </p>
+          )}
 
           <div className="flex items-center justify-end gap-4">
             <Link
@@ -152,9 +244,11 @@ export default function CreateRecordPage() {
             </Link>
             <button
               type="button"
-              className="inline-flex h-8 items-center rounded-full bg-aws-orange px-5 text-ui font-semibold text-aws-nav transition-opacity hover:opacity-90"
+              onClick={handleCreateRecords}
+              disabled={submitting}
+              className="inline-flex h-8 items-center rounded-full bg-aws-orange px-5 text-ui font-semibold text-aws-nav transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Create records
+              {submitting ? "Creating records..." : "Create records"}
             </button>
           </div>
         </div>

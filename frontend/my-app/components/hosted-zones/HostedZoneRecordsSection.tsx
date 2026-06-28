@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DnsRecordsTable from "./DnsRecordsTable";
 import RecordsToolbar from "./RecordsToolbar";
 import type { DNSRecord } from "@/lib/types";
@@ -15,41 +15,30 @@ type TabId = "records" | (typeof dummyTabs)[number]["id"];
 
 type HostedZoneRecordsSectionProps = {
   hostedZoneId: number;
+  records: DNSRecord[];
+  loading: boolean;
+  error: string;
+  selectedRecordIds: number[];
+  onToggleRecord: (recordId: number) => void;
+  deleteEnabled: boolean;
+  deleteDisabledTitle?: string;
+  deletingRecord?: boolean;
+  onDeleteRecordClick: () => void;
 };
 
 export default function HostedZoneRecordsSection({
   hostedZoneId,
+  records,
+  loading,
+  error,
+  selectedRecordIds,
+  onToggleRecord,
+  deleteEnabled,
+  deleteDisabledTitle,
+  deletingRecord = false,
+  onDeleteRecordClick,
 }: HostedZoneRecordsSectionProps) {
   const [activeTab, setActiveTab] = useState<TabId>("records");
-  const [records, setRecords] = useState<DNSRecord[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    async function fetchRecords() {
-      setLoading(true);
-      setError("");
-
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/hosted-zones/${hostedZoneId}/records`
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to load DNS records.");
-        }
-
-        const data = (await response.json()) as DNSRecord[];
-        setRecords(data);
-      } catch {
-        setError("Failed to load DNS records. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchRecords();
-  }, [hostedZoneId]);
 
   const tabs = [
     { id: "records" as const, label: `Records (${records.length})` },
@@ -85,7 +74,10 @@ export default function HostedZoneRecordsSection({
             <RecordsToolbar
               hostedZoneId={hostedZoneId}
               recordCount={records.length}
-              selectedRecordId={null}
+              deleteEnabled={deleteEnabled}
+              deleteDisabledTitle={deleteDisabledTitle}
+              deleting={deletingRecord}
+              onDeleteClick={onDeleteRecordClick}
             />
 
             {error && (
@@ -101,7 +93,14 @@ export default function HostedZoneRecordsSection({
             )}
 
             {!error && (loading || records.length > 0) && (
-              <DnsRecordsTable records={records} loading={loading} />
+              <div className="overflow-hidden rounded border border-aws-main-border/50">
+                <DnsRecordsTable
+                  records={records}
+                  loading={loading}
+                  selectedRecordIds={selectedRecordIds}
+                  onToggleRecord={onToggleRecord}
+                />
+              </div>
             )}
           </div>
         ) : (

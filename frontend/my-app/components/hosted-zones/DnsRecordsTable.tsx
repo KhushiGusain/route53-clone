@@ -13,11 +13,15 @@ const td =
 type DnsRecordsTableProps = {
   records: DNSRecord[];
   loading?: boolean;
+  selectedRecordIds: number[];
+  onToggleRecord: (recordId: number) => void;
 };
 
 export default function DnsRecordsTable({
   records,
   loading = false,
+  selectedRecordIds,
+  onToggleRecord,
 }: DnsRecordsTableProps) {
   return (
     <section className="relative overflow-x-auto">
@@ -43,30 +47,38 @@ export default function DnsRecordsTable({
           </tr>
         </thead>
         <tbody>
-          {records.map((record) => (
-            <tr
-              key={record.id}
-              className="transition-colors hover:bg-aws-main-elevated/40"
-            >
-              <td className={`${td} align-middle`}>
-                <input
-                  type="radio"
-                  name="dns-record"
-                  readOnly
-                  className="h-3.5 w-3.5 accent-aws-accent"
-                  aria-label={`Select ${record.name}`}
-                />
-              </td>
-              <td className={td}>
-                <span className="text-ui text-aws-link">{record.name}</span>
-              </td>
-              <td className={td}>{record.type}</td>
-              <td className={`${td} max-w-md truncate`} title={record.value}>
-                {record.value}
-              </td>
-              <td className={td}>{record.ttl}</td>
-            </tr>
-          ))}
+          {records.map((record) => {
+            const isSelected = selectedRecordIds.includes(record.id);
+
+            return (
+              <tr
+                key={record.id}
+                className={`transition-colors hover:bg-aws-main-elevated/40 ${
+                  isSelected
+                    ? "bg-aws-accent/10 ring-2 ring-inset ring-aws-accent"
+                    : ""
+                }`}
+              >
+                <td className={`${td} align-middle`}>
+                  <input
+                    type="checkbox"
+                    checked={isSelected}
+                    onChange={() => onToggleRecord(record.id)}
+                    className="h-3.5 w-3.5 accent-aws-accent"
+                    aria-label={`Select ${record.name}`}
+                  />
+                </td>
+                <td className={td}>
+                  <span className="text-ui text-aws-link">{record.name}</span>
+                </td>
+                <td className={td}>{record.type}</td>
+                <td className={`${td} max-w-md truncate`} title={record.value}>
+                  {record.value}
+                </td>
+                <td className={td}>{record.ttl}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </section>

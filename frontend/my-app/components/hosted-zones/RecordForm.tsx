@@ -12,6 +12,12 @@ export type RecordFormData = {
   ttl: string;
 };
 
+export type RecordFormErrors = {
+  recordType?: string;
+  value?: string;
+  ttl?: string;
+};
+
 const recordTypes: RecordType[] = ["A", "CNAME", "MX", "TXT"];
 
 const inputClass =
@@ -22,6 +28,7 @@ type RecordFormProps = {
   record: RecordFormData;
   zoneName: string;
   showDelete: boolean;
+  errors?: RecordFormErrors;
   onChange: (updates: Partial<Omit<RecordFormData, "id">>) => void;
   onDelete: () => void;
 };
@@ -51,6 +58,7 @@ export default function RecordForm({
   record,
   zoneName,
   showDelete,
+  errors = {},
   onChange,
   onDelete,
 }: RecordFormProps) {
@@ -143,6 +151,7 @@ export default function RecordForm({
                   onChange({ recordType: e.target.value as RecordType })
                 }
                 className={`${inputClass} mt-2`}
+                aria-invalid={Boolean(errors.recordType)}
               >
                 {recordTypes.map((type) => (
                   <option key={type} value={type}>
@@ -150,6 +159,11 @@ export default function RecordForm({
                   </option>
                 ))}
               </select>
+              {errors.recordType && (
+                <p className="mt-1 text-ui text-red-400" role="alert">
+                  {errors.recordType}
+                </p>
+              )}
             </div>
           </div>
 
@@ -164,10 +178,17 @@ export default function RecordForm({
               rows={4}
               placeholder="Enter record value"
               className={`${inputClass} mt-2`}
+              aria-invalid={Boolean(errors.value)}
             />
-            <p className="mt-1 text-ui text-aws-main-text-secondary">
-              Enter multiple values on separate lines.
-            </p>
+            {errors.value ? (
+              <p className="mt-1 text-ui text-red-400" role="alert">
+                {errors.value}
+              </p>
+            ) : (
+              <p className="mt-1 text-ui text-aws-main-text-secondary">
+                Enter multiple values on separate lines.
+              </p>
+            )}
           </div>
 
           <div className="grid gap-6 lg:grid-cols-2">
@@ -182,10 +203,17 @@ export default function RecordForm({
                 value={record.ttl}
                 onChange={(e) => onChange({ ttl: e.target.value })}
                 className={`${inputClass} mt-2`}
+                aria-invalid={Boolean(errors.ttl)}
               />
-              <p className="mt-1 text-ui text-aws-main-text-secondary">
-                Recommended values: 60 to 172800 (two days)
-              </p>
+              {errors.ttl ? (
+                <p className="mt-1 text-ui text-red-400" role="alert">
+                  {errors.ttl}
+                </p>
+              ) : (
+                <p className="mt-1 text-ui text-aws-main-text-secondary">
+                  Recommended values: 60 to 172800 (two days)
+                </p>
+              )}
             </div>
 
             <div>

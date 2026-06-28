@@ -22,11 +22,11 @@ export default function AppLayout({
     pageBreadcrumb === "Hosted zones" && (breadcrumbZone !== undefined || breadcrumbTail !== undefined);
 
   return (
-    <div className="flex min-h-screen flex-col bg-aws-nav">
+    <div className="flex h-screen flex-col overflow-hidden bg-aws-nav">
       <TopNav />
-      <div className="flex flex-1">
+      <div className="flex min-h-0 flex-1">
         {showSidebar && <Sidebar />}
-        <div className="flex min-w-0 flex-1 flex-col">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
           <div className="flex items-center gap-1.5 border-b border-aws-main-border/40 bg-aws-sidebar px-6 py-2 text-ui text-aws-nav-text-muted">
             <span className="cursor-pointer transition-colors hover:text-aws-link hover:underline">
               Route 53
@@ -62,7 +62,7 @@ export default function AppLayout({
               <span className="text-aws-nav-text">{pageBreadcrumb}</span>
             )}
           </div>
-          <main className="flex min-h-0 flex-1 flex-col bg-aws-main px-8 py-6">
+          <main className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-aws-main px-8 py-6">
             {children}
           </main>
         </div>

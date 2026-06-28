@@ -1,17 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import DeleteHostedZoneModal from "@/components/hosted-zones/DeleteHostedZoneModal";
-import HostedZoneDetailsHeader from "@/components/hosted-zones/HostedZoneDetailsHeader";
-import HostedZoneDetailsPanel from "@/components/hosted-zones/HostedZoneDetailsPanel";
-import HostedZoneRecordsSection from "@/components/hosted-zones/HostedZoneRecordsSection";
+import HostedZoneDetailsContent from "@/components/hosted-zones/HostedZoneDetailsContent";
 import type { HostedZone } from "@/lib/types";
 
 export default function HostedZoneDetailsPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const params = useParams();
   const zoneId = params.id as string;
 
@@ -21,6 +20,23 @@ export default function HostedZoneDetailsPage() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
+  useEffect(() => {
+    const recordsCreated = searchParams.get("recordsCreated");
+    if (!recordsCreated) {
+      return;
+    }
+
+    const count = Number(recordsCreated);
+    if (!Number.isNaN(count) && count > 0) {
+      setSuccessMessage(
+        `Successfully created ${count} record${count === 1 ? "" : "s"}.`
+      );
+    }
+
+    router.replace(`/hosted-zones/${zoneId}`);
+  }, [router, searchParams, zoneId]);
 
   useEffect(() => {
     async function fetchHostedZone() {
@@ -109,11 +125,11 @@ export default function HostedZoneDetailsPage() {
 
   return (
     <AppLayout breadcrumbZone={{ id: zone.id, name: zone.name }}>
-      <div className="flex flex-1 flex-col gap-5">
-        <HostedZoneDetailsHeader zone={zone} onDeleteClick={handleDeleteClick} />
-        <HostedZoneDetailsPanel zone={zone} />
-        <HostedZoneRecordsSection hostedZoneId={zone.id} />
-      </div>
+      <HostedZoneDetailsContent
+        zone={zone}
+        successMessage={successMessage}
+        onDeleteClick={handleDeleteClick}
+      />
 
       <DeleteHostedZoneModal
         zoneName={zone.name}

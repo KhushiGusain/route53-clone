@@ -83,8 +83,6 @@ def update_dns_record(
         return None
 
     updates = record_data.model_dump(exclude_unset=True)
-    if "type" in updates and updates["type"] is not None:
-        updates["type"] = updates["type"].value
 
     for field, value in updates.items():
         setattr(record, field, value)

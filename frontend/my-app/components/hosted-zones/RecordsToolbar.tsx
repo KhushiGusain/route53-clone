@@ -13,19 +13,25 @@ const secondaryClass =
 type RecordsToolbarProps = {
   hostedZoneId: number;
   recordCount: number;
-  selectedRecordId: number | null;
+  deleteEnabled: boolean;
+  deleteDisabledTitle?: string;
+  deleting?: boolean;
+  onDeleteClick: () => void;
 };
 
 export default function RecordsToolbar({
   hostedZoneId,
   recordCount,
-  selectedRecordId,
+  deleteEnabled,
+  deleteDisabledTitle,
+  deleting = false,
+  onDeleteClick,
 }: RecordsToolbarProps) {
   const [filter, setFilter] = useState<HostedZoneFilter>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
-  const deleteDisabled = selectedRecordId === null;
+  const deleteDisabled = !deleteEnabled || deleting;
 
   return (
     <section className="space-y-4">
@@ -46,7 +52,13 @@ export default function RecordsToolbar({
           role="toolbar"
           aria-label="Records actions"
         >
-          <button type="button" className={secondaryClass} disabled={deleteDisabled}>
+          <button
+            type="button"
+            className={secondaryClass}
+            disabled={deleteDisabled}
+            title={deleteDisabled ? deleteDisabledTitle : undefined}
+            onClick={onDeleteClick}
+          >
             Delete record
           </button>
           <button type="button" className={secondaryClass}>
