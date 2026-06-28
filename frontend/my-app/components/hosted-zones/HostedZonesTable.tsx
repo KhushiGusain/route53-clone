@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Loader2 } from "lucide-react";
 import type { HostedZone } from "@/lib/types";
 
@@ -71,16 +72,16 @@ export default function HostedZonesTable({
                 />
               </td>
               <td className={td}>
-                <button
-                  type="button"
-                  className="text-ui text-aws-link transition-colors hover:underline"
+                <Link
+                  href={`/hosted-zones/${zone.id}`}
+                  className="cursor-pointer text-ui text-aws-link transition-colors hover:underline"
                 >
                   {zone.name}
-                </button>
+                </Link>
               </td>
               <td className={td}>{zone.type}</td>
               <td className={td}>{zone.created_by}</td>
-              <td className={td}>-</td>
+              <td className={td}>{zone.record_count}</td>
               <td className={td}>{zone.description ?? "-"}</td>
               <td className={`${td} font-mono text-aws-main-text-muted`}>
                 {zone.hosted_zone_id}

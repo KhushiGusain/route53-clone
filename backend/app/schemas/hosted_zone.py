@@ -26,3 +26,4 @@ class HostedZoneResponse(BaseModel):
     created_by: str
     hosted_zone_id: str
     created_at: datetime
+    record_count: int

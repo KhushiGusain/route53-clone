@@ -1,7 +1,7 @@
 import secrets
 import string
 
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from app.models.hosted_zone import HostedZone
 from app.schemas.hosted_zone import HostedZoneCreate, HostedZoneUpdate
@@ -22,6 +22,10 @@ def _generate_hosted_zone_id(db: Session) -> str:
             return hosted_zone_id
 
 
+def _hosted_zone_query(db: Session):
+    return db.query(HostedZone).options(selectinload(HostedZone.records))
+
+
 def create_hosted_zone(db: Session, zone_data: HostedZoneCreate) -> HostedZone:
     hosted_zone = HostedZone(
         name=zone_data.name,
@@ -36,16 +40,17 @@ def create_hosted_zone(db: Session, zone_data: HostedZoneCreate) -> HostedZone:
     dns_record_service.create_default_dns_records(db, hosted_zone.id)
 
     db.commit()
-    db.refresh(hosted_zone)
-    return hosted_zone
+    return get_hosted_zone_by_id(db, hosted_zone.id)
 
 
 def get_all_hosted_zones(db: Session) -> list[HostedZone]:
-    return db.query(HostedZone).order_by(HostedZone.created_at.desc()).all()
+    return (
+        _hosted_zone_query(db).order_by(HostedZone.created_at.desc()).all()
+    )
 
 
 def get_hosted_zone_by_id(db: Session, zone_id: int) -> HostedZone | None:
-    return db.query(HostedZone).filter(HostedZone.id == zone_id).first()
+    return _hosted_zone_query(db).filter(HostedZone.id == zone_id).first()
 
 
 def update_hosted_zone(
@@ -60,8 +65,7 @@ def update_hosted_zone(
         setattr(hosted_zone, field, value)
 
     db.commit()
-    db.refresh(hosted_zone)
-    return hosted_zone
+    return get_hosted_zone_by_id(db, zone_id)
 
 
 def delete_hosted_zone(db: Session, zone_id: int) -> bool:

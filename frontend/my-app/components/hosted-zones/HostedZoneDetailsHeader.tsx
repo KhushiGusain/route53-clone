@@ -1,7 +1,7 @@
 import type { HostedZone } from "@/lib/types";
 
 const actionBtnClass =
-  "inline-flex h-7 items-center rounded-full border border-aws-main-border bg-transparent px-3 text-ui font-normal text-aws-main-text transition-colors hover:bg-aws-main-elevated";
+  "inline-flex h-7 items-center rounded-full cursor-pointer border border-aws-accent bg-transparent px-3 text-ui font-normal text-aws-link transition-colors hover:bg-aws-accent/10";
 
 type HostedZoneDetailsHeaderProps = {
   zone: HostedZone;

@@ -23,3 +23,7 @@ class HostedZone(Base):
         back_populates="hosted_zone",
         cascade="all, delete-orphan",
     )
+
+    @property
+    def record_count(self) -> int:
+        return len(self.records)

@@ -206,7 +206,7 @@ export default function HostedZoneDetailsContent({
       <div className="flex items-start gap-4">
         <div className="flex min-w-0 flex-1 flex-col gap-5">
           <HostedZoneDetailsHeader zone={zone} onDeleteClick={onDeleteClick} />
-          <HostedZoneDetailsPanel zone={zone} />
+          <HostedZoneDetailsPanel zone={zone} recordCount={records.length} />
           <HostedZoneRecordsSection
             hostedZoneId={zone.id}
             records={records}

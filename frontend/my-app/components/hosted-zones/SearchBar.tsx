@@ -173,7 +173,7 @@ export default function SearchBar({
   }
 
   const dropdownClass =
-    "absolute left-0 right-0 top-full z-20 mt-1 overflow-hidden rounded border border-aws-main-border bg-aws-main-elevated shadow-lg";
+    "absolute left-0 right-0 top-full z-20 mt-1 max-h-48 overflow-y-auto rounded border border-aws-main-border bg-aws-main-elevated shadow-lg";
 
   const dropdownItemClass =
     "block w-full cursor-pointer px-3 py-2 text-left text-ui text-aws-main-text transition-colors hover:bg-aws-accent/20";

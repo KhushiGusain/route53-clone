@@ -6,7 +6,7 @@ import { useState } from "react";
 import type { HostedZone } from "@/lib/types";
 
 const actionBtnClass =
-  "inline-flex h-7 shrink-0 items-center rounded-full border border-aws-main-border bg-transparent px-3 text-ui font-normal text-aws-main-text transition-colors hover:bg-aws-main-elevated";
+  "inline-flex h-7 shrink-0 items-center rounded-full cursor-pointer border border-aws-accent bg-transparent px-3 text-ui font-normal text-aws-link transition-colors hover:bg-aws-accent/10";
 
 const labelClass = "text-ui font-bold text-aws-main-text-secondary";
 const valueClass = "mt-1 text-body text-aws-main-text";
@@ -26,9 +26,10 @@ function DetailField({ label, value }: { label: string; value: string }) {
 
 type HostedZoneDetailsPanelProps = {
   zone: HostedZone;
+  recordCount: number;
 };
 
-export default function HostedZoneDetailsPanel({ zone }: HostedZoneDetailsPanelProps) {
+export default function HostedZoneDetailsPanel({ zone, recordCount }: HostedZoneDetailsPanelProps) {
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -69,7 +70,7 @@ export default function HostedZoneDetailsPanel({ zone }: HostedZoneDetailsPanelP
           <div className="space-y-5 md:border-l md:border-aws-main-border/50 md:pl-6">
             <DetailField label="Query log" value="-" />
             <DetailField label="Type" value={typeLabel(zone.type)} />
-            <DetailField label="Record count" value="0" />
+            <DetailField label="Record count" value={String(recordCount)} />
           </div>
 
           <div className="space-y-5 md:border-l md:border-aws-main-border/50 md:pl-6">

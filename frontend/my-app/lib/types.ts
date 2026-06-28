@@ -10,6 +10,7 @@ export type HostedZone = {
   created_by: string;
   hosted_zone_id: string;
   created_at: string;
+  record_count: number;
 };
 
 export type DNSRecord = {

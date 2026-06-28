@@ -8,7 +8,7 @@ import SearchBar, {
 import type { DNSRecord } from "@/lib/types";
 
 const secondaryClass =
-  "inline-flex h-7 items-center rounded border border-aws-main-border bg-transparent px-3 text-ui font-normal text-aws-main-text transition-colors hover:bg-aws-main-elevated disabled:cursor-not-allowed disabled:text-aws-main-text-muted disabled:opacity-60";
+  "inline-flex h-7 items-center rounded-full cursor-pointer border border-aws-accent bg-transparent px-3 text-ui font-normal text-aws-link transition-colors hover:bg-aws-accent/10 disabled:cursor-not-allowed disabled:border-aws-main-border disabled:text-aws-main-text-muted disabled:opacity-60";
 
 type RecordsToolbarProps = {
   hostedZoneId: number;

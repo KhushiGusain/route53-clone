@@ -3,6 +3,8 @@ import { ReactNode } from "react";
 import Sidebar from "./Sidebar";
 import TopNav from "./TopNav";
 
+const contentPaddingX = "px-8";
+
 type AppLayoutProps = {
   children: ReactNode;
   pageBreadcrumb?: string;
@@ -27,43 +29,56 @@ export default function AppLayout({
       <div className="flex min-h-0 flex-1">
         {showSidebar && <Sidebar />}
         <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-          <div className="flex items-center gap-1.5 border-b border-aws-main-border/40 bg-aws-sidebar px-6 py-2 text-ui text-aws-nav-text-muted">
-            <span className="cursor-pointer transition-colors hover:text-aws-link hover:underline">
-              Route 53
-            </span>
-            <span>›</span>
-            {isHostedZoneSection ? (
-              <>
-                <Link
-                  href="/hosted-zones"
-                  className="transition-colors hover:text-aws-link hover:underline"
-                >
-                  Hosted zones
-                </Link>
-                {breadcrumbZone && (
-                  <>
-                    <span>›</span>
-                    <Link
-                      href={`/hosted-zones/${breadcrumbZone.id}`}
-                      className="transition-colors hover:text-aws-link hover:underline"
-                    >
-                      {breadcrumbZone.name}
-                    </Link>
-                  </>
-                )}
-                {breadcrumbTail && (
-                  <>
-                    <span>›</span>
-                    <span className="text-aws-nav-text">{breadcrumbTail}</span>
-                  </>
-                )}
-              </>
-            ) : (
-              <span className="text-aws-nav-text">{pageBreadcrumb}</span>
-            )}
-          </div>
-          <main className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-aws-main px-8 py-6">
-            {children}
+          <main className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-aws-main">
+            <nav
+              aria-label="Breadcrumb"
+              className={`flex shrink-0 flex-wrap items-center gap-x-2 gap-y-1 ${contentPaddingX} pb-2 pt-4 text-table leading-4 text-aws-main-text-muted`}
+            >
+              <span className="cursor-pointer transition-colors hover:text-aws-link hover:underline">
+                Route 53
+              </span>
+              <span className="select-none" aria-hidden="true">
+                ›
+              </span>
+              {isHostedZoneSection ? (
+                <>
+                  <Link
+                    href="/hosted-zones"
+                    className="transition-colors hover:text-aws-link hover:underline"
+                  >
+                    Hosted zones
+                  </Link>
+                  {breadcrumbZone && (
+                    <>
+                      <span className="select-none" aria-hidden="true">
+                        ›
+                      </span>
+                      <Link
+                        href={`/hosted-zones/${breadcrumbZone.id}`}
+                        className="transition-colors hover:text-aws-link hover:underline"
+                      >
+                        {breadcrumbZone.name}
+                      </Link>
+                    </>
+                  )}
+                  {breadcrumbTail && (
+                    <>
+                      <span className="select-none" aria-hidden="true">
+                        ›
+                      </span>
+                      <span className="text-aws-main-text-secondary">
+                        {breadcrumbTail}
+                      </span>
+                    </>
+                  )}
+                </>
+              ) : (
+                <span className="text-aws-main-text-secondary">{pageBreadcrumb}</span>
+              )}
+            </nav>
+            <div className={`flex flex-1 flex-col pb-6 pt-1 ${contentPaddingX}`}>
+              {children}
+            </div>
           </main>
         </div>
       </div>
