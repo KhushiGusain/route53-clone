@@ -186,7 +186,7 @@ Base URL: `http://localhost:8000`
 | `PUT` | `/hosted-zones/{id}/records/{record_id}` | Update value / TTL |
 | `DELETE` | `/hosted-zones/{id}/records/{record_id}` | Delete a record |
 
-Interactive docs: http://localhost:8000/docs
+Interactive docs: https://route53-backend-gq8z.onrender.com/docs
 
 ---
 
