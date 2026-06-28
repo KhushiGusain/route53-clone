@@ -21,7 +21,8 @@ export default function AppLayout({
   showSidebar = true,
 }: AppLayoutProps) {
   const isHostedZoneSection =
-    pageBreadcrumb === "Hosted zones" && (breadcrumbZone !== undefined || breadcrumbTail !== undefined);
+    pageBreadcrumb === "Hosted zones" &&
+    (breadcrumbZone !== undefined || breadcrumbTail !== undefined);
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-aws-nav">
@@ -73,10 +74,14 @@ export default function AppLayout({
                   )}
                 </>
               ) : (
-                <span className="text-aws-main-text-secondary">{pageBreadcrumb}</span>
+                <span className="text-aws-main-text-secondary">
+                  {pageBreadcrumb}
+                </span>
               )}
             </nav>
-            <div className={`flex flex-1 flex-col pb-6 pt-1 ${contentPaddingX}`}>
+            <div
+              className={`flex flex-1 flex-col pb-6 pt-1 ${contentPaddingX}`}
+            >
               {children}
             </div>
           </main>

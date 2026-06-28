@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import DeleteHostedZoneModal from "@/components/hosted-zones/DeleteHostedZoneModal";
 import HostedZoneDetailsContent from "@/components/hosted-zones/HostedZoneDetailsContent";
+import api from "@/lib/api";
 import type { HostedZone } from "@/lib/types";
 
 export default function HostedZoneDetailsPage() {
@@ -31,7 +32,7 @@ export default function HostedZoneDetailsPage() {
     const count = Number(recordsCreated);
     if (!Number.isNaN(count) && count > 0) {
       setSuccessMessage(
-        `Successfully created ${count} record${count === 1 ? "" : "s"}.`
+        `Successfully created ${count} record${count === 1 ? "" : "s"}.`,
       );
     }
 
@@ -44,15 +45,7 @@ export default function HostedZoneDetailsPage() {
       setFetchError("");
 
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/hosted-zones/${zoneId}`
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to load hosted zone.");
-        }
-
-        const data = (await response.json()) as HostedZone;
+        const data = await api.getHostedZone(zoneId);
         setZone(data);
       } catch {
         setFetchError("Failed to load hosted zone. Please try again.");
@@ -81,14 +74,7 @@ export default function HostedZoneDetailsPage() {
     setDeleteError("");
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/hosted-zones/${zoneId}`,
-        { method: "DELETE" }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to delete hosted zone.");
-      }
+      await api.deleteHostedZone(zoneId);
 
       setDeleteModalOpen(false);
       router.push("/hosted-zones");

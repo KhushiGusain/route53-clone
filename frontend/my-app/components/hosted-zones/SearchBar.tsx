@@ -30,7 +30,14 @@ const DNS_RECORD_PROPERTY_OPTIONS: {
 ];
 
 const ZONE_TYPE_SUGGESTIONS: ZoneType[] = ["Public", "Private"];
-const DNS_TYPE_SUGGESTIONS: RecordType[] = ["A", "CNAME", "MX", "TXT", "NS", "SOA"];
+const DNS_TYPE_SUGGESTIONS: RecordType[] = [
+  "A",
+  "CNAME",
+  "MX",
+  "TXT",
+  "NS",
+  "SOA",
+];
 
 type SearchBarProps = {
   zones?: HostedZone[];
@@ -41,14 +48,14 @@ type SearchBarProps = {
 
 function getPropertyLabel(
   property: SearchProperty,
-  options: { value: SearchProperty; label: string }[]
+  options: { value: SearchProperty; label: string }[],
 ) {
   return options.find((option) => option.value === property)?.label ?? "";
 }
 
 function getChipLabel(
   property: SearchProperty,
-  options: { value: SearchProperty; chipLabel: string }[]
+  options: { value: SearchProperty; chipLabel: string }[],
 ) {
   return options.find((option) => option.value === property)?.chipLabel ?? "";
 }
@@ -69,9 +76,8 @@ export default function SearchBar({
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [selectedProperty, setSelectedProperty] = useState<SearchProperty | null>(
-    null
-  );
+  const [selectedProperty, setSelectedProperty] =
+    useState<SearchProperty | null>(null);
   const [inputValue, setInputValue] = useState("");
   const [showPropertyMenu, setShowPropertyMenu] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -199,7 +205,11 @@ export default function SearchBar({
         />
 
         {showPropertyMenu && (
-          <div className={dropdownClass} role="listbox" aria-label="Search properties">
+          <div
+            className={dropdownClass}
+            role="listbox"
+            aria-label="Search properties"
+          >
             {propertyOptions.map((option) => (
               <button
                 key={option.value}
@@ -216,7 +226,11 @@ export default function SearchBar({
         )}
 
         {showSuggestions && selectedProperty && suggestions.length > 0 && (
-          <div className={dropdownClass} role="listbox" aria-label="Search suggestions">
+          <div
+            className={dropdownClass}
+            role="listbox"
+            aria-label="Search suggestions"
+          >
             {suggestions.map((suggestion) => (
               <button
                 key={suggestion}
@@ -270,7 +284,7 @@ export default function SearchBar({
 
 export function filterHostedZones(
   zones: HostedZone[],
-  filter: HostedZoneFilter
+  filter: HostedZoneFilter,
 ): HostedZone[] {
   if (!filter) {
     return zones;
@@ -282,12 +296,14 @@ export function filterHostedZones(
     return zones.filter((zone) => zone.name.toLowerCase().includes(query));
   }
 
-  return zones.filter((zone) => zone.type.toLowerCase() === query.toLowerCase());
+  return zones.filter(
+    (zone) => zone.type.toLowerCase() === query.toLowerCase(),
+  );
 }
 
 export function filterDnsRecords(
   records: DNSRecord[],
-  filter: HostedZoneFilter
+  filter: HostedZoneFilter,
 ): DNSRecord[] {
   if (!filter) {
     return records;
@@ -296,7 +312,9 @@ export function filterDnsRecords(
   const query = filter.value.toLowerCase();
 
   if (filter.property === "name") {
-    return records.filter((record) => record.name.toLowerCase().includes(query));
+    return records.filter((record) =>
+      record.name.toLowerCase().includes(query),
+    );
   }
 
   return records.filter((record) => record.type.toLowerCase().includes(query));

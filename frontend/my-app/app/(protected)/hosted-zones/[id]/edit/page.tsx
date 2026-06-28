@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
+import api from "@/lib/api";
 import type { HostedZone } from "@/lib/types";
 
 const readOnlyValueClass = "mt-1 text-body text-aws-main-text";
@@ -30,15 +31,7 @@ export default function EditHostedZonePage() {
       setFetchError("");
 
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/hosted-zones/${zoneId}`
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to load hosted zone.");
-        }
-
-        const data = (await response.json()) as HostedZone;
+        const data = await api.getHostedZone(zoneId);
         setZone(data);
         setDescription(data.description ?? "");
       } catch {
@@ -57,20 +50,9 @@ export default function EditHostedZonePage() {
     setSaving(true);
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/hosted-zones/${zoneId}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            description: description.trim() || null,
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to update hosted zone.");
-      }
+      await api.updateHostedZone(zoneId, {
+        description: description.trim() || null,
+      });
 
       router.push("/hosted-zones");
     } catch {
@@ -120,13 +102,16 @@ export default function EditHostedZonePage() {
               Edit hosted zone
             </h2>
             <p className="mt-1 text-ui text-aws-main-text-secondary">
-              A hosted zone is a container that holds information about how you want
-              to route traffic for a domain, such as example.com, and its subdomains.
+              A hosted zone is a container that holds information about how you
+              want to route traffic for a domain, such as example.com, and its
+              subdomains.
             </p>
 
             <div className="mt-6 space-y-6">
               <div>
-                <p className="text-ui font-bold text-aws-main-text">Domain name</p>
+                <p className="text-ui font-bold text-aws-main-text">
+                  Domain name
+                </p>
                 <p className={readOnlyValueClass}>{zone.name}</p>
               </div>
 
@@ -140,7 +125,9 @@ export default function EditHostedZonePage() {
               </div>
 
               <div>
-                <p className="text-ui font-bold text-aws-main-text">Record count</p>
+                <p className="text-ui font-bold text-aws-main-text">
+                  Record count
+                </p>
                 <p className={readOnlyValueClass}>-</p>
               </div>
 
@@ -157,7 +144,8 @@ export default function EditHostedZonePage() {
                   Description - optional
                 </label>
                 <p className="mt-1 text-ui text-aws-main-text-secondary">
-                  This value lets you distinguish hosted zones that have the same name.
+                  This value lets you distinguish hosted zones that have the
+                  same name.
                 </p>
                 <textarea
                   id="description"
@@ -169,7 +157,8 @@ export default function EditHostedZonePage() {
                   className="mt-2 w-full rounded border border-aws-main-border/70 bg-aws-main px-3 py-2 text-body text-aws-main-text placeholder:text-aws-main-text-muted focus:border-aws-accent focus:outline-none focus:ring-1 focus:ring-aws-accent/30"
                 />
                 <p className="mt-1 text-ui text-aws-main-text-muted">
-                  The description can have up to 256 characters. {description.length}
+                  The description can have up to 256 characters.{" "}
+                  {description.length}
                   /256
                 </p>
               </div>

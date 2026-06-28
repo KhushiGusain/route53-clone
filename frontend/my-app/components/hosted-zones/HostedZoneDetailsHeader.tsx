@@ -25,7 +25,11 @@ export default function HostedZoneDetailsHeader({
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
-        <button type="button" className={actionBtnClass} onClick={onDeleteClick}>
+        <button
+          type="button"
+          className={actionBtnClass}
+          onClick={onDeleteClick}
+        >
           Delete zone
         </button>
         <button type="button" className={actionBtnClass}>

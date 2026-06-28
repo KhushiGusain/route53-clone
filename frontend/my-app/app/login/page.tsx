@@ -24,9 +24,12 @@ export default function LoginPage() {
 
     try {
       await api.post("/login", { username, password });
-      localStorage.setItem("user", JSON.stringify({
-        username: username,
-      }));
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          username: username,
+        }),
+      );
       router.push("/hosted-zones");
     } catch (err) {
       if (err instanceof ApiError) {

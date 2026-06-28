@@ -44,9 +44,7 @@ def list_dns_records(hosted_zone_id: int, db: Session = Depends(get_db)):
     "/hosted-zones/{hosted_zone_id}/records/{record_id}",
     response_model=DNSRecordResponse,
 )
-def get_dns_record(
-    hosted_zone_id: int, record_id: int, db: Session = Depends(get_db)
-):
+def get_dns_record(hosted_zone_id: int, record_id: int, db: Session = Depends(get_db)):
     _ensure_hosted_zone_exists(db, hosted_zone_id)
 
     record = dns_record_service.get_dns_record_by_id(db, hosted_zone_id, record_id)

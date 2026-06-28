@@ -42,12 +42,12 @@ export default function HostedZoneDetailsContent({
 
   const sidebarRecord = useMemo(
     () => getSidebarRecord(records, selectedRecordIds),
-    [records, selectedRecordIds]
+    [records, selectedRecordIds],
   );
 
   const selectedRecords = useMemo(
     () => getSelectedRecords(records, selectedRecordIds),
-    [records, selectedRecordIds]
+    [records, selectedRecordIds],
   );
 
   const fetchRecords = useCallback(
@@ -56,15 +56,7 @@ export default function HostedZoneDetailsContent({
       setError("");
 
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/hosted-zones/${zone.id}/records`
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to load DNS records.");
-        }
-
-        const data = (await response.json()) as DNSRecord[];
+        const data = await api.getDnsRecords(zone.id);
         setRecords(data);
 
         if (options?.clearSelection !== false) {
@@ -76,12 +68,12 @@ export default function HostedZoneDetailsContent({
         setLoading(false);
       }
     },
-    [zone.id]
+    [zone.id],
   );
 
   const deleteDisabledTitle = hasSystemGeneratedSelectedRecords(
     records,
-    selectedRecordIds
+    selectedRecordIds,
   )
     ? "System-generated records cannot be deleted."
     : undefined;
@@ -90,7 +82,7 @@ export default function HostedZoneDetailsContent({
     setSelectedRecordIds((prev) =>
       prev.includes(recordId)
         ? prev.filter((id) => id !== recordId)
-        : [...prev, recordId]
+        : [...prev, recordId],
     );
   }
 
@@ -135,8 +127,8 @@ export default function HostedZoneDetailsContent({
     try {
       await Promise.all(
         selectedRecordIds.map((recordId) =>
-          api.deleteDnsRecord(zone.id, recordId)
-        )
+          api.deleteDnsRecord(zone.id, recordId),
+        ),
       );
       setDeleteModalOpen(false);
       setSelectedRecordIds([]);

@@ -54,8 +54,8 @@ export default function RecordsToolbar({
             <span className="font-normal text-aws-link">Info</span>
           </h2>
           <p className="mt-1.5 text-ui leading-snug text-aws-main-text-secondary">
-            Automatic mode is the current search behavior optimized for best filter
-            results.
+            Automatic mode is the current search behavior optimized for best
+            filter results.
           </p>
         </div>
 

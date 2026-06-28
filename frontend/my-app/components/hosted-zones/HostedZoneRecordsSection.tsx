@@ -49,8 +49,11 @@ export default function HostedZoneRecordsSection({
   const [pageSize, setPageSize] = useState(10);
 
   const filteredRecords = filterDnsRecords(records, filter);
-  const { items: paginatedRecords, totalPages, currentPage: safePage } =
-    paginateItems(filteredRecords, currentPage, pageSize);
+  const {
+    items: paginatedRecords,
+    totalPages,
+    currentPage: safePage,
+  } = paginateItems(filteredRecords, currentPage, pageSize);
 
   function handleFilterChange(nextFilter: HostedZoneFilter) {
     setFilter(nextFilter);
@@ -128,11 +131,14 @@ export default function HostedZoneRecordsSection({
               </p>
             )}
 
-            {!error && !loading && records.length > 0 && filteredRecords.length === 0 && (
-              <p className="text-ui text-aws-main-text-secondary">
-                No DNS records found.
-              </p>
-            )}
+            {!error &&
+              !loading &&
+              records.length > 0 &&
+              filteredRecords.length === 0 && (
+                <p className="text-ui text-aws-main-text-secondary">
+                  No DNS records found.
+                </p>
+              )}
 
             {!error && (loading || filteredRecords.length > 0) && (
               <div className="overflow-hidden rounded border border-aws-main-border/50">

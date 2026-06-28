@@ -80,7 +80,9 @@ function PanelShell({
           <ChevronRight className="h-4 w-4" />
         </button>
       </div>
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden">{children}</div>
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+        {children}
+      </div>
     </aside>
   );
 }
@@ -121,31 +123,31 @@ function RecordDetailsView({
     <PanelShell title="Record details" onClose={onClose}>
       <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
         <div className="flex flex-col gap-5">
-        <button type="button" onClick={onEdit} className={editBtnClass}>
-          Edit record
-        </button>
+          <button type="button" onClick={onEdit} className={editBtnClass}>
+            Edit record
+          </button>
 
-        <DetailField label="Record name" value={record.name} />
-        <DetailField label="Record type" value={record.type} />
+          <DetailField label="Record name" value={record.name} />
+          <DetailField label="Record type" value={record.type} />
 
-        <div>
-          <p className={labelClass}>Value</p>
-          <div className="mt-1 space-y-1">
-            {valueLines.length > 0 ? (
-              valueLines.map((line, index) => (
-                <p key={`${line}-${index}`} className={valueClass}>
-                  {line}
-                </p>
-              ))
-            ) : (
-              <p className={valueClass}>-</p>
-            )}
+          <div>
+            <p className={labelClass}>Value</p>
+            <div className="mt-1 space-y-1">
+              {valueLines.length > 0 ? (
+                valueLines.map((line, index) => (
+                  <p key={`${line}-${index}`} className={valueClass}>
+                    {line}
+                  </p>
+                ))
+              ) : (
+                <p className={valueClass}>-</p>
+              )}
+            </div>
           </div>
-        </div>
 
-        <DetailField label="Alias" value="No" />
-        <DetailField label="TTL (seconds)" value={String(record.ttl)} />
-        <DetailField label="Routing policy" value="Simple" />
+          <DetailField label="Alias" value="No" />
+          <DetailField label="TTL (seconds)" value={String(record.ttl)} />
+          <DetailField label="Routing policy" value="Simple" />
         </div>
       </div>
     </PanelShell>
@@ -178,84 +180,87 @@ function RecordEditView({
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
         <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
           <div className="flex flex-col gap-5">
-          <ReadOnlyField label="Record name" value={record.name} />
-          <ReadOnlyField label="Record type" value={record.type} />
+            <ReadOnlyField label="Record name" value={record.name} />
+            <ReadOnlyField label="Record type" value={record.type} />
 
-          <div>
-            <label htmlFor={`edit-value-${record.id}`} className={labelClass}>
-              Value
-            </label>
-            <textarea
-              id={`edit-value-${record.id}`}
-              value={draft.value}
-              onChange={(e) => onDraftChange({ value: e.target.value })}
-              rows={4}
-              disabled={saving}
-              aria-invalid={Boolean(fieldErrors.value)}
-              className={`${inputClass} mt-2 disabled:cursor-not-allowed disabled:opacity-60`}
-            />
-            {fieldErrors.value ? (
-              <p className="mt-1 text-ui text-red-400" role="alert">
-                {fieldErrors.value}
-              </p>
-            ) : (
-              <p className="mt-1 text-ui text-aws-main-text-secondary">
-                Enter multiple values on separate lines.
-              </p>
-            )}
-          </div>
+            <div>
+              <label htmlFor={`edit-value-${record.id}`} className={labelClass}>
+                Value
+              </label>
+              <textarea
+                id={`edit-value-${record.id}`}
+                value={draft.value}
+                onChange={(e) => onDraftChange({ value: e.target.value })}
+                rows={4}
+                disabled={saving}
+                aria-invalid={Boolean(fieldErrors.value)}
+                className={`${inputClass} mt-2 disabled:cursor-not-allowed disabled:opacity-60`}
+              />
+              {fieldErrors.value ? (
+                <p className="mt-1 text-ui text-red-400" role="alert">
+                  {fieldErrors.value}
+                </p>
+              ) : (
+                <p className="mt-1 text-ui text-aws-main-text-secondary">
+                  Enter multiple values on separate lines.
+                </p>
+              )}
+            </div>
 
-          <div className="flex items-center gap-2 opacity-60">
-            <button
-              type="button"
-              role="switch"
-              aria-checked={false}
-              aria-label="Alias"
-              disabled
-              className="relative h-5 w-9 shrink-0 cursor-not-allowed rounded-full bg-aws-main-border"
-            >
-              <span className="absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-white shadow" />
-            </button>
-            <span className="text-ui text-aws-main-text">Alias</span>
-          </div>
+            <div className="flex items-center gap-2 opacity-60">
+              <button
+                type="button"
+                role="switch"
+                aria-checked={false}
+                aria-label="Alias"
+                disabled
+                className="relative h-5 w-9 shrink-0 cursor-not-allowed rounded-full bg-aws-main-border"
+              >
+                <span className="absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-white shadow" />
+              </button>
+              <span className="text-ui text-aws-main-text">Alias</span>
+            </div>
 
-          <div>
-            <label htmlFor={`edit-ttl-${record.id}`} className={labelClass}>
-              TTL (seconds)
-            </label>
-            <input
-              id={`edit-ttl-${record.id}`}
-              type="number"
-              min={1}
-              value={draft.ttl}
-              onChange={(e) => onDraftChange({ ttl: e.target.value })}
-              disabled={saving}
-              aria-invalid={Boolean(fieldErrors.ttl)}
-              className={`${inputClass} mt-2 disabled:cursor-not-allowed disabled:opacity-60`}
-            />
-            {fieldErrors.ttl && (
-              <p className="mt-1 text-ui text-red-400" role="alert">
-                {fieldErrors.ttl}
-              </p>
-            )}
-          </div>
+            <div>
+              <label htmlFor={`edit-ttl-${record.id}`} className={labelClass}>
+                TTL (seconds)
+              </label>
+              <input
+                id={`edit-ttl-${record.id}`}
+                type="number"
+                min={1}
+                value={draft.ttl}
+                onChange={(e) => onDraftChange({ ttl: e.target.value })}
+                disabled={saving}
+                aria-invalid={Boolean(fieldErrors.ttl)}
+                className={`${inputClass} mt-2 disabled:cursor-not-allowed disabled:opacity-60`}
+              />
+              {fieldErrors.ttl && (
+                <p className="mt-1 text-ui text-red-400" role="alert">
+                  {fieldErrors.ttl}
+                </p>
+              )}
+            </div>
 
-          <div>
-            <label htmlFor={`edit-routing-${record.id}`} className={labelClass}>
-              Routing policy
-            </label>
-            <select
-              id={`edit-routing-${record.id}`}
-              value={draft.routingPolicy}
-              onChange={(e) =>
-                onDraftChange({ routingPolicy: e.target.value })
-              }
-              disabled={saving}
-              className={`${inputClass} mt-2 disabled:cursor-not-allowed disabled:opacity-60`}
-            >
-              <option value="simple">Simple routing</option>
-            </select>
-          </div>
+            <div>
+              <label
+                htmlFor={`edit-routing-${record.id}`}
+                className={labelClass}
+              >
+                Routing policy
+              </label>
+              <select
+                id={`edit-routing-${record.id}`}
+                value={draft.routingPolicy}
+                onChange={(e) =>
+                  onDraftChange({ routingPolicy: e.target.value })
+                }
+                disabled={saving}
+                className={`${inputClass} mt-2 disabled:cursor-not-allowed disabled:opacity-60`}
+              >
+                <option value="simple">Simple routing</option>
+              </select>
+            </div>
           </div>
 
           {saveError && (
@@ -295,7 +300,7 @@ export default function RecordDetailsPanel({
 }: RecordDetailsPanelProps) {
   const [mode, setMode] = useState<SidebarMode>("view");
   const [draft, setDraft] = useState<RecordEditDraft>(() =>
-    createDraftFromRecord(record)
+    createDraftFromRecord(record),
   );
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState("");
@@ -387,10 +392,6 @@ export default function RecordDetailsPanel({
   }
 
   return (
-    <RecordDetailsView
-      record={record}
-      onClose={onClose}
-      onEdit={handleEdit}
-    />
+    <RecordDetailsView record={record} onClose={onClose} onEdit={handleEdit} />
   );
 }

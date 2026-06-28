@@ -6,11 +6,14 @@ import AppLayout from "@/components/layout/AppLayout";
 import DeleteHostedZoneModal from "@/components/hosted-zones/DeleteHostedZoneModal";
 import HostedZonesTable from "@/components/hosted-zones/HostedZonesTable";
 import PageHeader from "@/components/hosted-zones/PageHeader";
-import Pagination, { paginateItems } from "@/components/hosted-zones/Pagination";
+import Pagination, {
+  paginateItems,
+} from "@/components/hosted-zones/Pagination";
 import SearchBar, {
   filterHostedZones,
   type HostedZoneFilter,
 } from "@/components/hosted-zones/SearchBar";
+import api from "@/lib/api";
 
 export default function HostedZonesPage() {
   const [zones, setZones] = useState<HostedZone[]>([]);
@@ -26,12 +29,15 @@ export default function HostedZonesPage() {
   const [pageSize, setPageSize] = useState(10);
 
   const filteredZones = filterHostedZones(zones, filter);
-  const { items: paginatedZones, totalPages, currentPage: safePage } =
-    paginateItems(filteredZones, currentPage, pageSize);
+  const {
+    items: paginatedZones,
+    totalPages,
+    currentPage: safePage,
+  } = paginateItems(filteredZones, currentPage, pageSize);
 
   const selectedZone =
     selectedZoneId !== null
-      ? zones.find((zone) => zone.id === selectedZoneId) ?? null
+      ? (zones.find((zone) => zone.id === selectedZoneId) ?? null)
       : null;
 
   const fetchHostedZones = useCallback(async (isRefresh = false) => {
@@ -43,20 +49,12 @@ export default function HostedZonesPage() {
     setError("");
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/hosted-zones`
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to load hosted zones.");
-      }
-
-      const data = (await response.json()) as HostedZone[];
+      const data = await api.getHostedZones();
       setZones(data);
       setSelectedZoneId((current) =>
         current !== null && data.some((zone) => zone.id === current)
           ? current
-          : null
+          : null,
       );
     } catch {
       setError("Failed to load hosted zones. Please try again.");
@@ -125,14 +123,7 @@ export default function HostedZonesPage() {
     setDeleteError("");
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/hosted-zones/${selectedZoneId}`,
-        { method: "DELETE" }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to delete hosted zone.");
-      }
+      await api.deleteHostedZone(selectedZoneId);
 
       setDeleteModalOpen(false);
       setSelectedZoneId(null);

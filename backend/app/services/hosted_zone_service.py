@@ -44,9 +44,7 @@ def create_hosted_zone(db: Session, zone_data: HostedZoneCreate) -> HostedZone:
 
 
 def get_all_hosted_zones(db: Session) -> list[HostedZone]:
-    return (
-        _hosted_zone_query(db).order_by(HostedZone.created_at.desc()).all()
-    )
+    return _hosted_zone_query(db).order_by(HostedZone.created_at.desc()).all()
 
 
 def get_hosted_zone_by_id(db: Session, zone_id: int) -> HostedZone | None:

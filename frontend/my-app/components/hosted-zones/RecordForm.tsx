@@ -36,8 +36,7 @@ type RecordFormProps = {
 function InfoLabel({ children }: { children: React.ReactNode }) {
   return (
     <span className="text-ui font-bold text-aws-main-text">
-      {children}{" "}
-      <span className="font-normal text-aws-link">Info</span>
+      {children} <span className="font-normal text-aws-link">Info</span>
     </span>
   );
 }

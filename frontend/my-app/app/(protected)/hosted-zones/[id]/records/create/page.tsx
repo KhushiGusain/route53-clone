@@ -59,15 +59,7 @@ export default function CreateRecordPage() {
       setFetchError("");
 
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/hosted-zones/${zoneId}`
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to load hosted zone.");
-        }
-
-        const data = (await response.json()) as HostedZone;
+        const data = await api.getHostedZone(zoneId);
         setZone(data);
       } catch {
         setFetchError("Failed to load hosted zone. Please try again.");
@@ -90,12 +82,12 @@ export default function CreateRecordPage() {
 
   function updateRecord(
     id: number,
-    updates: Partial<Omit<RecordFormData, "id">>
+    updates: Partial<Omit<RecordFormData, "id">>,
   ) {
     setRecords((prev) =>
       prev.map((record) =>
-        record.id === id ? { ...record, ...updates } : record
-      )
+        record.id === id ? { ...record, ...updates } : record,
+      ),
     );
 
     if (fieldErrors[id]) {
@@ -138,13 +130,11 @@ export default function CreateRecordPage() {
             type: record.recordType,
             value: record.value.trim(),
             ttl: Number(record.ttl),
-          })
-        )
+          }),
+        ),
       );
 
-      router.push(
-        `/hosted-zones/${zone.id}?recordsCreated=${records.length}`
-      );
+      router.push(`/hosted-zones/${zone.id}?recordsCreated=${records.length}`);
     } catch {
       setSubmitError("Failed to create one or more records. Please try again.");
     } finally {

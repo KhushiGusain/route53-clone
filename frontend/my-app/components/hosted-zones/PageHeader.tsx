@@ -1,4 +1,4 @@
-import Toolbar from "./Toolbar";
+import HostedZonesToolbar from "./HostedZonesToolbar";
 
 type PageHeaderProps = {
   filteredCount: number;
@@ -34,10 +34,11 @@ export default function PageHeader({
             </span>
           </h1>
           <p className="mt-1.5 text-ui leading-snug text-aws-main-text-secondary">
-            Automatic mode is the current search behavior optimized for best filter results.
+            Automatic mode is the current search behavior optimized for best
+            filter results.
           </p>
         </div>
-        <Toolbar
+        <HostedZonesToolbar
           selectedZoneId={selectedZoneId}
           refreshing={refreshing}
           onRefresh={onRefresh}

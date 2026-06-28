@@ -29,7 +29,10 @@ type HostedZoneDetailsPanelProps = {
   recordCount: number;
 };
 
-export default function HostedZoneDetailsPanel({ zone, recordCount }: HostedZoneDetailsPanelProps) {
+export default function HostedZoneDetailsPanel({
+  zone,
+  recordCount,
+}: HostedZoneDetailsPanelProps) {
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -51,10 +54,7 @@ export default function HostedZoneDetailsPanel({ zone, recordCount }: HostedZone
           </span>
         </button>
 
-        <Link
-          href={`/hosted-zones/${zone.id}/edit`}
-          className={actionBtnClass}
-        >
+        <Link href={`/hosted-zones/${zone.id}/edit`} className={actionBtnClass}>
           Edit hosted zone
         </Link>
       </div>

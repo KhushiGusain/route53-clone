@@ -78,7 +78,7 @@ export default function Pagination({
 export function paginateItems<T>(
   items: T[],
   currentPage: number,
-  pageSize: number
+  pageSize: number,
 ) {
   const totalPages = Math.max(1, Math.ceil(items.length / pageSize));
   const safePage = Math.min(currentPage, totalPages);

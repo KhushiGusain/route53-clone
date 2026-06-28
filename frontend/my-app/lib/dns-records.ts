@@ -2,7 +2,7 @@ import type { DNSRecord } from "./types";
 
 export function getSidebarRecord(
   records: DNSRecord[],
-  selectedRecordIds: number[]
+  selectedRecordIds: number[],
 ): DNSRecord | null {
   if (selectedRecordIds.length !== 1) {
     return null;
@@ -13,14 +13,14 @@ export function getSidebarRecord(
 
 export function canDeleteSelectedRecords(
   records: DNSRecord[],
-  selectedRecordIds: number[]
+  selectedRecordIds: number[],
 ): boolean {
   if (selectedRecordIds.length === 0) {
     return false;
   }
 
   const selectedRecords = records.filter((record) =>
-    selectedRecordIds.includes(record.id)
+    selectedRecordIds.includes(record.id),
   );
 
   if (selectedRecords.length !== selectedRecordIds.length) {
@@ -28,26 +28,26 @@ export function canDeleteSelectedRecords(
   }
 
   return selectedRecords.every(
-    (record) => record.type !== "NS" && record.type !== "SOA"
+    (record) => record.type !== "NS" && record.type !== "SOA",
   );
 }
 
 export function getSelectedRecords(
   records: DNSRecord[],
-  selectedRecordIds: number[]
+  selectedRecordIds: number[],
 ): DNSRecord[] {
   return records.filter((record) => selectedRecordIds.includes(record.id));
 }
 
 export function hasSystemGeneratedSelectedRecords(
   records: DNSRecord[],
-  selectedRecordIds: number[]
+  selectedRecordIds: number[],
 ): boolean {
   if (selectedRecordIds.length === 0) {
     return false;
   }
 
   return getSelectedRecords(records, selectedRecordIds).some(
-    (record) => record.type === "NS" || record.type === "SOA"
+    (record) => record.type === "NS" || record.type === "SOA",
   );
 }

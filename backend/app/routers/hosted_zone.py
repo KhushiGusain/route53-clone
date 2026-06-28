@@ -32,9 +32,7 @@ def list_hosted_zones(db: Session = Depends(get_db)):
     response_model=HostedZoneResponse,
     status_code=status.HTTP_201_CREATED,
 )
-def create_hosted_zone(
-    zone_data: HostedZoneCreate, db: Session = Depends(get_db)
-):
+def create_hosted_zone(zone_data: HostedZoneCreate, db: Session = Depends(get_db)):
     return hosted_zone_service.create_hosted_zone(db, zone_data)
 
 

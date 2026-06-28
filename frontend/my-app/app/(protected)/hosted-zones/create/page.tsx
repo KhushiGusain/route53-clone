@@ -4,18 +4,21 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
-import type { HostedZone, ZoneType } from "@/lib/types";
+import api from "@/lib/api";
+import type { ZoneType } from "@/lib/types";
 
 const zoneTypes: { value: ZoneType; title: string; description: string }[] = [
   {
     value: "Public",
     title: "Public hosted zone",
-    description: "A public hosted zone determines how traffic is routed on the internet.",
+    description:
+      "A public hosted zone determines how traffic is routed on the internet.",
   },
   {
     value: "Private",
     title: "Private hosted zone",
-    description: "A private hosted zone determines how traffic is routed within an Amazon VPC.",
+    description:
+      "A private hosted zone determines how traffic is routed within an Amazon VPC.",
   },
 ];
 
@@ -39,24 +42,11 @@ export default function CreateHostedZonePage() {
     setLoading(true);
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/hosted-zones`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: name.trim(),
-            type,
-            description: description.trim() || null,
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to create hosted zone.");
-      }
-
-      const createdZone = (await response.json()) as HostedZone;
+      const createdZone = await api.createHostedZone({
+        name: name.trim(),
+        type,
+        description: description.trim() || null,
+      });
       router.push(`/hosted-zones/${createdZone.id}`);
     } catch {
       setError("Failed to create hosted zone. Please try again.");
@@ -78,17 +68,22 @@ export default function CreateHostedZonePage() {
               Hosted zone configuration
             </h2>
             <p className="mt-1 text-ui text-aws-main-text-secondary">
-              A hosted zone is a container that holds information about how you want
-              to route traffic for a domain, such as example.com, and its subdomains.
+              A hosted zone is a container that holds information about how you
+              want to route traffic for a domain, such as example.com, and its
+              subdomains.
             </p>
 
             <div className="mt-6 space-y-6">
               <div>
-                <label htmlFor="name" className="block text-ui font-bold text-aws-main-text">
+                <label
+                  htmlFor="name"
+                  className="block text-ui font-bold text-aws-main-text"
+                >
                   Domain name
                 </label>
                 <p className="mt-1 text-ui text-aws-main-text-secondary">
-                  This is the name of the domain that you want to route traffic for.
+                  This is the name of the domain that you want to route traffic
+                  for.
                 </p>
                 <input
                   id="name"
@@ -108,7 +103,8 @@ export default function CreateHostedZonePage() {
                   Description - optional
                 </label>
                 <p className="mt-1 text-ui text-aws-main-text-secondary">
-                  This value lets you distinguish hosted zones that have the same name.
+                  This value lets you distinguish hosted zones that have the
+                  same name.
                 </p>
                 <textarea
                   id="description"
@@ -129,8 +125,8 @@ export default function CreateHostedZonePage() {
                   Type
                 </legend>
                 <p className="mt-1 text-ui text-aws-main-text-secondary">
-                  The type indicates whether you want to route traffic on the internet
-                  or in an Amazon VPC.
+                  The type indicates whether you want to route traffic on the
+                  internet or in an Amazon VPC.
                 </p>
                 <div className="mt-3 grid gap-3 sm:grid-cols-2">
                   {zoneTypes.map((option) => (

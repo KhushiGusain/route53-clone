@@ -33,9 +33,8 @@ export default function ResizableSidebar({
   }, []);
 
   const clampWidth = useCallback(
-    (nextWidth: number) =>
-      Math.min(maxWidth, Math.max(minWidth, nextWidth)),
-    [maxWidth, minWidth]
+    (nextWidth: number) => Math.min(maxWidth, Math.max(minWidth, nextWidth)),
+    [maxWidth, minWidth],
   );
 
   useEffect(() => {

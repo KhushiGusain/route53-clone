@@ -7,19 +7,19 @@ import { RefreshCw } from "lucide-react";
 const secondaryClass =
   "inline-flex h-7 items-center rounded border border-aws-main-border bg-transparent px-3 text-ui font-normal text-aws-main-text transition-colors hover:bg-aws-main-elevated disabled:cursor-not-allowed disabled:text-aws-main-text-muted disabled:opacity-60";
 
-type ToolbarProps = {
+type HostedZonesToolbarProps = {
   selectedZoneId: number | null;
   refreshing: boolean;
   onRefresh: () => void;
   onDeleteClick: () => void;
 };
 
-export default function Toolbar({
+export default function HostedZonesToolbar({
   selectedZoneId,
   refreshing,
   onRefresh,
   onDeleteClick,
-}: ToolbarProps) {
+}: HostedZonesToolbarProps) {
   const router = useRouter();
   const disabled = selectedZoneId === null;
 
@@ -36,7 +36,9 @@ export default function Toolbar({
         className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-aws-main-border bg-transparent text-aws-link transition-colors hover:bg-aws-main-elevated disabled:cursor-not-allowed disabled:opacity-60"
         aria-label="Refresh"
       >
-        <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`} />
+        <RefreshCw
+          className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`}
+        />
       </button>
 
       <button

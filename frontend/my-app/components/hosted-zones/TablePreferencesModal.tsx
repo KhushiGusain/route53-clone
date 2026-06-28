@@ -8,7 +8,11 @@ const PAGE_SIZE_OPTIONS = [10, 20, 50] as const;
 const COLUMN_OPTIONS = [
   { id: "name", label: "Hosted zone name", defaultOn: true },
   { id: "type", label: "Type", defaultOn: true },
-  { id: "acceleratedRecovery", label: "Accelerated recovery", defaultOn: false },
+  {
+    id: "acceleratedRecovery",
+    label: "Accelerated recovery",
+    defaultOn: false,
+  },
   { id: "createdBy", label: "Created by", defaultOn: true },
   { id: "recordCount", label: "Record count", defaultOn: true },
   { id: "description", label: "Description", defaultOn: true },
@@ -85,8 +89,8 @@ export default function TablePreferencesModal({
   const [visibleColumns, setVisibleColumns] = useState<Record<string, boolean>>(
     () =>
       Object.fromEntries(
-        COLUMN_OPTIONS.map((column) => [column.id, column.defaultOn])
-      )
+        COLUMN_OPTIONS.map((column) => [column.id, column.defaultOn]),
+      ),
   );
 
   useEffect(() => {
@@ -96,8 +100,8 @@ export default function TablePreferencesModal({
       setSearchMode("automatic");
       setVisibleColumns(
         Object.fromEntries(
-          COLUMN_OPTIONS.map((column) => [column.id, column.defaultOn])
-        )
+          COLUMN_OPTIONS.map((column) => [column.id, column.defaultOn]),
+        ),
       );
     }
   }, [open, pageSize]);
@@ -225,7 +229,9 @@ export default function TablePreferencesModal({
             <h3 className="text-ui font-bold text-aws-main-text">
               Select visible columns
             </h3>
-            <p className="mt-1 text-ui text-aws-main-text-secondary">Properties</p>
+            <p className="mt-1 text-ui text-aws-main-text-secondary">
+              Properties
+            </p>
 
             <ul className="mt-4 space-y-3">
               {COLUMN_OPTIONS.map((column) => (
@@ -233,7 +239,9 @@ export default function TablePreferencesModal({
                   key={column.id}
                   className="flex items-center justify-between gap-4"
                 >
-                  <span className="text-ui text-aws-main-text">{column.label}</span>
+                  <span className="text-ui text-aws-main-text">
+                    {column.label}
+                  </span>
                   <ToggleSwitch
                     checked={visibleColumns[column.id] ?? false}
                     onChange={() => toggleColumn(column.id)}
