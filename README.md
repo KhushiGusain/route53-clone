@@ -23,15 +23,15 @@ A full-stack DNS management console inspired by AWS Route 53. Create hosted zone
 
 ---
 
-## Demo
+## Live Demo
 
-| | URL |
-|---|---|
-| **App** | http://localhost:3000 |
-| **API** | http://localhost:8000 |
-| **API docs (Swagger)** | http://localhost:8000/docs |
+| Service | URL |
+|----------|-----|
+| **Frontend** | https://route53-clone-phi.vercel.app |
+| **Backend API** | https://route53-backend-gq8z.onrender.com |
+| **Swagger API Docs** | https://route53-backend-gq8z.onrender.com/docs |
 
-**Login:** `admin` / `admin123`
+**Login:** Login using the "Use Demo Account"
 
 > **Live hosted demo:** _Add your deployed URL here once published (e.g. Vercel + Railway/Render)._
 
