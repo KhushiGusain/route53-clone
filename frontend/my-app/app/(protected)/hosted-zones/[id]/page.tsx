@@ -7,6 +7,7 @@ import AppLayout from "@/components/layout/AppLayout";
 import DeleteHostedZoneModal from "@/components/hosted-zones/DeleteHostedZoneModal";
 import HostedZoneDetailsHeader from "@/components/hosted-zones/HostedZoneDetailsHeader";
 import HostedZoneDetailsPanel from "@/components/hosted-zones/HostedZoneDetailsPanel";
+import HostedZoneRecordsSection from "@/components/hosted-zones/HostedZoneRecordsSection";
 import type { HostedZone } from "@/lib/types";
 
 export default function HostedZoneDetailsPage() {
@@ -111,6 +112,7 @@ export default function HostedZoneDetailsPage() {
       <div className="flex flex-1 flex-col gap-5">
         <HostedZoneDetailsHeader zone={zone} onDeleteClick={handleDeleteClick} />
         <HostedZoneDetailsPanel zone={zone} />
+        <HostedZoneRecordsSection hostedZoneId={zone.id} />
       </div>
 
       <DeleteHostedZoneModal
