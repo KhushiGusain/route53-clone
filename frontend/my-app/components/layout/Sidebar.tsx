@@ -1,6 +1,27 @@
-function NavLink({ label, active = false }: { label: string; active?: boolean }) {
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const navItems = [
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "Hosted zones", href: "/hosted-zones" },
+  { label: "Health checks", href: "/health-checks" },
+  { label: "Profiles", href: "/profiles" },
+] as const;
+
+function NavLink({
+  label,
+  href,
+  active,
+}: {
+  label: string;
+  href: string;
+  active: boolean;
+}) {
   return (
-    <span
+    <Link
+      href={href}
       className={`relative block py-1.5 pl-4 pr-3 text-ui leading-5 transition-colors ${
         active
           ? "font-semibold text-aws-link before:absolute before:inset-y-1 before:left-0 before:w-0.5 before:rounded-full before:bg-aws-link"
@@ -8,18 +29,13 @@ function NavLink({ label, active = false }: { label: string; active?: boolean })
       }`}
     >
       {label}
-    </span>
+    </Link>
   );
 }
 
-const navItems = [
-  { label: "Dashboard" },
-  { label: "Hosted zones", active: true },
-  { label: "Health checks" },
-  { label: "Profiles" },
-];
-
 export default function Sidebar() {
+  const pathname = usePathname();
+
   return (
     <aside className="hidden w-64 shrink-0 flex-col bg-aws-sidebar md:flex">
       <div className="px-5 pb-1 pt-4">
@@ -31,7 +47,15 @@ export default function Sidebar() {
         <ul>
           {navItems.map((item) => (
             <li key={item.label}>
-              <NavLink {...item} />
+              <NavLink
+                label={item.label}
+                href={item.href}
+                active={
+                  item.href === "/hosted-zones"
+                    ? pathname.startsWith("/hosted-zones")
+                    : pathname === item.href
+                }
+              />
             </li>
           ))}
         </ul>
