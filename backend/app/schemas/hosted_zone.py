@@ -13,8 +13,6 @@ class HostedZoneCreate(BaseModel):
 
 
 class HostedZoneUpdate(BaseModel):
-    name: str | None = None
-    type: ZoneType | None = None
     description: str | None = None
 
 

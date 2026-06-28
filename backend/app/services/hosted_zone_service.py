@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.models.hosted_zone import HostedZone
 from app.schemas.hosted_zone import HostedZoneCreate, HostedZoneUpdate
+from app.services import dns_record_service
 
 
 def _generate_hosted_zone_id(db: Session) -> str:
@@ -30,6 +31,10 @@ def create_hosted_zone(db: Session, zone_data: HostedZoneCreate) -> HostedZone:
     )
 
     db.add(hosted_zone)
+    db.flush()
+
+    dns_record_service.create_default_dns_records(db, hosted_zone.id)
+
     db.commit()
     db.refresh(hosted_zone)
     return hosted_zone
