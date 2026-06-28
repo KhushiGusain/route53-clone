@@ -7,7 +7,10 @@ import DeleteHostedZoneModal from "@/components/hosted-zones/DeleteHostedZoneMod
 import HostedZonesTable from "@/components/hosted-zones/HostedZonesTable";
 import PageHeader from "@/components/hosted-zones/PageHeader";
 import Pagination from "@/components/hosted-zones/Pagination";
-import SearchBar from "@/components/hosted-zones/SearchBar";
+import SearchBar, {
+  filterHostedZones,
+  type HostedZoneFilter,
+} from "@/components/hosted-zones/SearchBar";
 
 export default function HostedZonesPage() {
   const [zones, setZones] = useState<HostedZone[]>([]);
@@ -17,6 +20,9 @@ export default function HostedZonesPage() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState("");
+  const [filter, setFilter] = useState<HostedZoneFilter>(null);
+
+  const filteredZones = filterHostedZones(zones, filter);
 
   const selectedZone =
     selectedZoneId !== null
@@ -53,6 +59,15 @@ export default function HostedZonesPage() {
   useEffect(() => {
     fetchHostedZones();
   }, [fetchHostedZones]);
+
+  useEffect(() => {
+    if (
+      selectedZoneId !== null &&
+      !filteredZones.some((zone) => zone.id === selectedZoneId)
+    ) {
+      setSelectedZoneId(null);
+    }
+  }, [filteredZones, selectedZoneId]);
 
   function handleDeleteClick() {
     if (selectedZone) {
@@ -100,13 +115,15 @@ export default function HostedZonesPage() {
     <AppLayout>
       <div className="flex flex-1 flex-col gap-5">
         <PageHeader
-          zoneCount={zones.length}
+          filteredCount={filteredZones.length}
+          totalCount={zones.length}
+          hasActiveFilter={filter !== null}
           selectedZoneId={selectedZoneId}
           onDeleteClick={handleDeleteClick}
         />
 
-        <div className="flex items-center gap-4">
-          <SearchBar />
+        <div className="flex items-start gap-4">
+          <SearchBar zones={zones} filter={filter} onFilterChange={setFilter} />
           <Pagination />
         </div>
 
@@ -122,7 +139,7 @@ export default function HostedZonesPage() {
 
         {!loading && !error && (
           <HostedZonesTable
-            zones={zones}
+            zones={filteredZones}
             selectedZoneId={selectedZoneId}
             onSelectZone={setSelectedZoneId}
           />

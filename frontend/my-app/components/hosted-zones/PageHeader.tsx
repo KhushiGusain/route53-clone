@@ -1,16 +1,24 @@
 import Toolbar from "./Toolbar";
 
 type PageHeaderProps = {
-  zoneCount: number;
+  filteredCount: number;
+  totalCount: number;
+  hasActiveFilter: boolean;
   selectedZoneId: number | null;
   onDeleteClick: () => void;
 };
 
 export default function PageHeader({
-  zoneCount,
+  filteredCount,
+  totalCount,
+  hasActiveFilter,
   selectedZoneId,
   onDeleteClick,
 }: PageHeaderProps) {
+  const countLabel = hasActiveFilter
+    ? `${filteredCount}/${totalCount}`
+    : `${totalCount}`;
+
   return (
     <section>
       <div className="flex items-start justify-between gap-4">
@@ -18,7 +26,7 @@ export default function PageHeader({
           <h1 className="text-2xl font-normal leading-tight text-aws-main-text">
             Hosted zones{" "}
             <span className="text-lg font-normal text-aws-main-text-secondary">
-              ({zoneCount})
+              ({countLabel})
             </span>
           </h1>
           <p className="mt-1.5 text-ui leading-snug text-aws-main-text-secondary">
