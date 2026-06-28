@@ -4,6 +4,9 @@ import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import api, { ApiError } from "@/lib/api";
 
+const DEMO_USERNAME = "admin";
+const DEMO_PASSWORD = "admin123";
+
 export default function LoginPage() {
   const router = useRouter();
   const [username, setUsername] = useState("");
@@ -41,6 +44,12 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
+  }
+
+  function handleUseDemoAccount() {
+    setError("");
+    setUsername(DEMO_USERNAME);
+    setPassword(DEMO_PASSWORD);
   }
 
   return (
@@ -94,9 +103,18 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-md cursor-pointer bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full cursor-pointer rounded-md bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? "Signing in..." : "Login"}
+          </button>
+
+          <button
+            type="button"
+            disabled={loading}
+            onClick={handleUseDemoAccount}
+            className="w-full cursor-pointer rounded-md border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            Use demo account
           </button>
         </form>
       </div>
