@@ -2,6 +2,27 @@
 
 A full-stack DNS management console inspired by AWS Route 53. Create hosted zones, manage DNS records, search and paginate results, and edit records inline — with an AWS-style UI.
 
+## Features
+
+### Hosted Zones
+- View hosted zones
+- Create hosted zones
+- Edit hosted zones
+- Delete hosted zones
+- Search & filter
+- Pagination
+- Hosted zone details
+
+### DNS Records
+- View DNS records
+- Create one or multiple DNS records
+- Edit DNS records
+- Delete one or multiple DNS records
+- Automatic NS & SOA record creation
+- Record details sidebar
+
+---
+
 ## Demo
 
 | | URL |
