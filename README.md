@@ -28,12 +28,9 @@ A full-stack DNS management console inspired by AWS Route 53. Create hosted zone
 | Service | URL |
 |----------|-----|
 | **Frontend** | https://route53-clone-phi.vercel.app/login |
-| **Backend API** | https://route53-backend-gq8z.onrender.com |
 | **Swagger API Docs** | https://route53-backend-gq8z.onrender.com/docs |
 
 **Login:** Login using the "Use Demo Account"
-
-> **Live hosted demo:** _Add your deployed URL here once published (e.g. Vercel + Railway/Render)._
 
 ---
 
