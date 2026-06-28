@@ -13,6 +13,9 @@ A full-stack DNS management console inspired by AWS Route 53. Create hosted zone
 - Pagination
 - Hosted zone details
 
+<img width="958" height="499" alt="image" src="https://github.com/user-attachments/assets/b1e15a0d-a903-4513-ad39-4abfe6203ab3" />
+
+
 ### DNS Records
 - View DNS records
 - Create one or multiple DNS records
@@ -20,6 +23,9 @@ A full-stack DNS management console inspired by AWS Route 53. Create hosted zone
 - Delete one or multiple DNS records
 - Automatic NS & SOA record creation
 - Record details sidebar
+
+<img width="792" height="437" alt="image" src="https://github.com/user-attachments/assets/b0a5e947-2d79-46ce-bb31-45a56869dae0" />
+
 
 ---
 
