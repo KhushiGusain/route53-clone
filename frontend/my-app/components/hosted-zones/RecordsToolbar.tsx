@@ -1,18 +1,26 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import Pagination from "@/components/hosted-zones/Pagination";
 import SearchBar, {
   type HostedZoneFilter,
 } from "@/components/hosted-zones/SearchBar";
+import type { DNSRecord } from "@/lib/types";
 
 const secondaryClass =
   "inline-flex h-7 items-center rounded border border-aws-main-border bg-transparent px-3 text-ui font-normal text-aws-main-text transition-colors hover:bg-aws-main-elevated disabled:cursor-not-allowed disabled:text-aws-main-text-muted disabled:opacity-60";
 
 type RecordsToolbarProps = {
   hostedZoneId: number;
+  records: DNSRecord[];
   recordCount: number;
+  filter: HostedZoneFilter;
+  onFilterChange: (filter: HostedZoneFilter) => void;
+  currentPage: number;
+  totalPages: number;
+  pageSize: number;
+  onPageChange: (page: number) => void;
+  onPageSizeChange: (pageSize: number) => void;
   deleteEnabled: boolean;
   deleteDisabledTitle?: string;
   deleting?: boolean;
@@ -21,16 +29,20 @@ type RecordsToolbarProps = {
 
 export default function RecordsToolbar({
   hostedZoneId,
+  records,
   recordCount,
+  filter,
+  onFilterChange,
+  currentPage,
+  totalPages,
+  pageSize,
+  onPageChange,
+  onPageSizeChange,
   deleteEnabled,
   deleteDisabledTitle,
   deleting = false,
   onDeleteClick,
 }: RecordsToolbarProps) {
-  const [filter, setFilter] = useState<HostedZoneFilter>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-
   const deleteDisabled = !deleteEnabled || deleting;
 
   return (
@@ -74,16 +86,17 @@ export default function RecordsToolbar({
       </div>
 
       <div className="flex items-start gap-4">
-        <SearchBar zones={[]} filter={filter} onFilterChange={setFilter} />
+        <SearchBar
+          records={records}
+          filter={filter}
+          onFilterChange={onFilterChange}
+        />
         <Pagination
           currentPage={currentPage}
-          totalPages={1}
+          totalPages={totalPages}
           pageSize={pageSize}
-          onPageChange={setCurrentPage}
-          onPageSizeChange={(nextPageSize) => {
-            setPageSize(nextPageSize);
-            setCurrentPage(1);
-          }}
+          onPageChange={onPageChange}
+          onPageSizeChange={onPageSizeChange}
         />
       </div>
     </section>

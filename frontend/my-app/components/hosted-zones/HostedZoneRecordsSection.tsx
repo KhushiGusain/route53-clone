@@ -1,8 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DnsRecordsTable from "./DnsRecordsTable";
+import { paginateItems } from "./Pagination";
 import RecordsToolbar from "./RecordsToolbar";
+import {
+  filterDnsRecords,
+  type HostedZoneFilter,
+} from "@/components/hosted-zones/SearchBar";
 import type { DNSRecord } from "@/lib/types";
 
 const dummyTabs = [
@@ -39,6 +44,29 @@ export default function HostedZoneRecordsSection({
   onDeleteRecordClick,
 }: HostedZoneRecordsSectionProps) {
   const [activeTab, setActiveTab] = useState<TabId>("records");
+  const [filter, setFilter] = useState<HostedZoneFilter>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
+  const filteredRecords = filterDnsRecords(records, filter);
+  const { items: paginatedRecords, totalPages, currentPage: safePage } =
+    paginateItems(filteredRecords, currentPage, pageSize);
+
+  function handleFilterChange(nextFilter: HostedZoneFilter) {
+    setFilter(nextFilter);
+    setCurrentPage(1);
+  }
+
+  function handlePageSizeChange(nextPageSize: number) {
+    setPageSize(nextPageSize);
+    setCurrentPage(1);
+  }
+
+  useEffect(() => {
+    if (currentPage !== safePage) {
+      setCurrentPage(safePage);
+    }
+  }, [currentPage, safePage]);
 
   const tabs = [
     { id: "records" as const, label: `Records (${records.length})` },
@@ -73,7 +101,15 @@ export default function HostedZoneRecordsSection({
           <div className="space-y-4">
             <RecordsToolbar
               hostedZoneId={hostedZoneId}
+              records={records}
               recordCount={records.length}
+              filter={filter}
+              onFilterChange={handleFilterChange}
+              currentPage={safePage}
+              totalPages={totalPages}
+              pageSize={pageSize}
+              onPageChange={setCurrentPage}
+              onPageSizeChange={handlePageSizeChange}
               deleteEnabled={deleteEnabled}
               deleteDisabledTitle={deleteDisabledTitle}
               deleting={deletingRecord}
@@ -92,10 +128,16 @@ export default function HostedZoneRecordsSection({
               </p>
             )}
 
-            {!error && (loading || records.length > 0) && (
+            {!error && !loading && records.length > 0 && filteredRecords.length === 0 && (
+              <p className="text-ui text-aws-main-text-secondary">
+                No DNS records found.
+              </p>
+            )}
+
+            {!error && (loading || filteredRecords.length > 0) && (
               <div className="overflow-hidden rounded border border-aws-main-border/50">
                 <DnsRecordsTable
-                  records={records}
+                  records={paginatedRecords}
                   loading={loading}
                   selectedRecordIds={selectedRecordIds}
                   onToggleRecord={onToggleRecord}

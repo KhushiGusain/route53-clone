@@ -2,7 +2,7 @@
 
 import { Search, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { HostedZone, ZoneType } from "@/lib/types";
+import type { DNSRecord, HostedZone, RecordType, ZoneType } from "@/lib/types";
 
 export type SearchProperty = "name" | "type";
 
@@ -11,29 +11,61 @@ export type HostedZoneFilter = {
   value: string;
 } | null;
 
-const PROPERTY_OPTIONS: { value: SearchProperty; label: string; chipLabel: string }[] =
-  [
-    { value: "name", label: "Hosted Zone Name", chipLabel: "Hosted Zone Name" },
-    { value: "type", label: "Type", chipLabel: "Type" },
-  ];
+const HOSTED_ZONE_PROPERTY_OPTIONS: {
+  value: SearchProperty;
+  label: string;
+  chipLabel: string;
+}[] = [
+  { value: "name", label: "Hosted Zone Name", chipLabel: "Hosted Zone Name" },
+  { value: "type", label: "Type", chipLabel: "Type" },
+];
 
-const TYPE_SUGGESTIONS: ZoneType[] = ["Public", "Private"];
+const DNS_RECORD_PROPERTY_OPTIONS: {
+  value: SearchProperty;
+  label: string;
+  chipLabel: string;
+}[] = [
+  { value: "name", label: "Record Name", chipLabel: "Record Name" },
+  { value: "type", label: "Record Type", chipLabel: "Record Type" },
+];
+
+const ZONE_TYPE_SUGGESTIONS: ZoneType[] = ["Public", "Private"];
+const DNS_TYPE_SUGGESTIONS: RecordType[] = ["A", "CNAME", "MX", "TXT", "NS", "SOA"];
 
 type SearchBarProps = {
-  zones: HostedZone[];
+  zones?: HostedZone[];
+  records?: DNSRecord[];
   filter: HostedZoneFilter;
   onFilterChange: (filter: HostedZoneFilter) => void;
 };
 
-function getPropertyLabel(property: SearchProperty) {
-  return PROPERTY_OPTIONS.find((option) => option.value === property)?.label ?? "";
+function getPropertyLabel(
+  property: SearchProperty,
+  options: { value: SearchProperty; label: string }[]
+) {
+  return options.find((option) => option.value === property)?.label ?? "";
 }
 
-function getChipLabel(property: SearchProperty) {
-  return PROPERTY_OPTIONS.find((option) => option.value === property)?.chipLabel ?? "";
+function getChipLabel(
+  property: SearchProperty,
+  options: { value: SearchProperty; chipLabel: string }[]
+) {
+  return options.find((option) => option.value === property)?.chipLabel ?? "";
 }
 
-export default function SearchBar({ zones, filter, onFilterChange }: SearchBarProps) {
+export default function SearchBar({
+  zones = [],
+  records,
+  filter,
+  onFilterChange,
+}: SearchBarProps) {
+  const isDnsRecordsMode = records !== undefined;
+  const propertyOptions = isDnsRecordsMode
+    ? DNS_RECORD_PROPERTY_OPTIONS
+    : HOSTED_ZONE_PROPERTY_OPTIONS;
+  const typeSuggestions = isDnsRecordsMode
+    ? DNS_TYPE_SUGGESTIONS
+    : ZONE_TYPE_SUGGESTIONS;
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -44,10 +76,13 @@ export default function SearchBar({ zones, filter, onFilterChange }: SearchBarPr
   const [showPropertyMenu, setShowPropertyMenu] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
-  const uniqueZoneNames = useMemo(
-    () => [...new Set(zones.map((zone) => zone.name))].sort(),
-    [zones]
-  );
+  const uniqueNames = useMemo(() => {
+    if (isDnsRecordsMode) {
+      return [...new Set(records.map((record) => record.name))].sort();
+    }
+
+    return [...new Set(zones.map((zone) => zone.name))].sort();
+  }, [isDnsRecordsMode, records, zones]);
 
   const suggestions = useMemo(() => {
     if (!selectedProperty) {
@@ -55,18 +90,17 @@ export default function SearchBar({ zones, filter, onFilterChange }: SearchBarPr
     }
 
     const query = inputValue.trim().toLowerCase();
-    const source =
-      selectedProperty === "name" ? uniqueZoneNames : TYPE_SUGGESTIONS;
+    const source = selectedProperty === "name" ? uniqueNames : typeSuggestions;
 
     if (!query) {
       return source;
     }
 
     return source.filter((item) => item.toLowerCase().includes(query));
-  }, [selectedProperty, inputValue, uniqueZoneNames]);
+  }, [selectedProperty, inputValue, uniqueNames, typeSuggestions]);
 
   const placeholder = selectedProperty
-    ? `${getPropertyLabel(selectedProperty)}:`
+    ? `${getPropertyLabel(selectedProperty, propertyOptions)}:`
     : "Filter records by property or value";
 
   useEffect(() => {
@@ -166,7 +200,7 @@ export default function SearchBar({ zones, filter, onFilterChange }: SearchBarPr
 
         {showPropertyMenu && (
           <div className={dropdownClass} role="listbox" aria-label="Search properties">
-            {PROPERTY_OPTIONS.map((option) => (
+            {propertyOptions.map((option) => (
               <button
                 key={option.value}
                 type="button"
@@ -204,7 +238,7 @@ export default function SearchBar({ zones, filter, onFilterChange }: SearchBarPr
           <div className="inline-flex items-center overflow-hidden rounded border border-aws-accent bg-aws-main-elevated">
             <span className="border-r border-aws-accent/60 px-2.5 py-1 text-ui text-aws-main-text">
               <span className="border-b border-dotted border-aws-main-text-secondary">
-                {getChipLabel(filter.property)}
+                {getChipLabel(filter.property, propertyOptions)}
               </span>
               <span className="text-aws-main-text-secondary"> : </span>
               {filter.value}
@@ -249,4 +283,21 @@ export function filterHostedZones(
   }
 
   return zones.filter((zone) => zone.type.toLowerCase() === query.toLowerCase());
+}
+
+export function filterDnsRecords(
+  records: DNSRecord[],
+  filter: HostedZoneFilter
+): DNSRecord[] {
+  if (!filter) {
+    return records;
+  }
+
+  const query = filter.value.toLowerCase();
+
+  if (filter.property === "name") {
+    return records.filter((record) => record.name.toLowerCase().includes(query));
+  }
+
+  return records.filter((record) => record.type.toLowerCase().includes(query));
 }
