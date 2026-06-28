@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import Sidebar from "./Sidebar";
 import TopNav from "./TopNav";
 
-const contentPaddingX = "px-8";
+const contentPaddingX = "px-4 sm:px-6 lg:px-8";
 
 type AppLayoutProps = {
   children: ReactNode;
@@ -26,7 +26,7 @@ export default function AppLayout({
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-aws-nav">
       <TopNav />
-      <div className="flex min-h-0 flex-1">
+      <div className="flex min-h-0 flex-1 flex-col md:flex-row">
         {showSidebar && <Sidebar />}
         <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-aws-main">

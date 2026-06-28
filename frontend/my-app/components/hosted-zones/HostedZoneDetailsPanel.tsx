@@ -34,7 +34,7 @@ export default function HostedZoneDetailsPanel({ zone, recordCount }: HostedZone
 
   return (
     <section className="rounded border border-aws-main-border/70 bg-aws-main-elevated/30">
-      <div className="flex items-center justify-between gap-4 border-b border-aws-main-border/50 px-4 py-3">
+      <div className="flex flex-col gap-3 border-b border-aws-main-border/50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <button
           type="button"
           onClick={() => setExpanded((current) => !current)}

@@ -47,8 +47,8 @@ export default function RecordsToolbar({
 
   return (
     <section className="space-y-4">
-      <div className="flex items-start justify-between gap-4">
-        <div>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
           <h2 className="text-body font-bold text-aws-main-text">
             Records ({recordCount}){" "}
             <span className="font-normal text-aws-link">Info</span>
@@ -60,7 +60,7 @@ export default function RecordsToolbar({
         </div>
 
         <div
-          className="flex shrink-0 flex-nowrap items-center gap-1.5"
+          className="flex flex-wrap items-center gap-1.5"
           role="toolbar"
           aria-label="Records actions"
         >
@@ -85,7 +85,7 @@ export default function RecordsToolbar({
         </div>
       </div>
 
-      <div className="flex items-start gap-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
         <SearchBar
           records={records}
           filter={filter}

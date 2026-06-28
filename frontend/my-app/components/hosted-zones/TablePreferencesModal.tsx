@@ -119,7 +119,7 @@ export default function TablePreferencesModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[#0f1218]/80 p-6"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#0f1218]/80 p-4 sm:p-6"
       role="presentation"
     >
       <div

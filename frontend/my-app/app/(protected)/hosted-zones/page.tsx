@@ -157,7 +157,7 @@ export default function HostedZonesPage() {
           onDeleteClick={handleDeleteClick}
         />
 
-        <div className="flex items-start gap-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
           <SearchBar
             zones={zones}
             filter={filter}

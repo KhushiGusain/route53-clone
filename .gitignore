@@ -52,6 +52,9 @@ Thumbs.db
 .vscode/
 *.pem
 
+# SQLite (local dev database)
+backend/route53.db
+
 # Vercel / deploy
 .vercel
 

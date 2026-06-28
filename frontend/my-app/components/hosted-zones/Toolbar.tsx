@@ -25,7 +25,7 @@ export default function Toolbar({
 
   return (
     <div
-      className="mt-0.5 flex shrink-0 flex-nowrap items-center gap-1.5"
+      className="mt-0.5 flex flex-wrap items-center gap-1.5"
       role="toolbar"
       aria-label="Hosted zones actions"
     >

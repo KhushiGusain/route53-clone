@@ -25,9 +25,9 @@ export default function PageHeader({
 
   return (
     <section>
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div>
-          <h1 className="text-2xl font-normal leading-tight text-aws-main-text">
+          <h1 className="text-xl font-normal leading-tight text-aws-main-text sm:text-2xl">
             Hosted zones{" "}
             <span className="text-lg font-normal text-aws-main-text-secondary">
               ({countLabel})

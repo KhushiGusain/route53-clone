@@ -21,7 +21,16 @@ export default function ResizableSidebar({
 }: ResizableSidebarProps) {
   const [width, setWidth] = useState(defaultWidth);
   const [isResizing, setIsResizing] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 1280px)");
+    const update = () => setIsDesktop(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
 
   const clampWidth = useCallback(
     (nextWidth: number) =>
@@ -64,8 +73,8 @@ export default function ResizableSidebar({
   return (
     <div
       ref={containerRef}
-      className="sticky top-6 flex h-[calc(100vh-9rem)] max-h-[calc(100vh-9rem)] shrink-0 self-start overflow-hidden"
-      style={{ width }}
+      className="w-full shrink-0 self-stretch xl:sticky xl:top-6 xl:flex xl:h-[calc(100vh-9rem)] xl:max-h-[calc(100vh-9rem)] xl:self-start xl:overflow-hidden"
+      style={isDesktop ? { width } : undefined}
     >
       <div
         role="separator"
@@ -75,7 +84,7 @@ export default function ResizableSidebar({
           event.preventDefault();
           setIsResizing(true);
         }}
-        className={`group relative w-1 shrink-0 cursor-col-resize bg-aws-main-border/40 transition-colors hover:bg-aws-accent/60 ${
+        className={`group relative hidden w-1 shrink-0 cursor-col-resize bg-aws-main-border/40 transition-colors hover:bg-aws-accent/60 xl:block ${
           isResizing ? "bg-aws-accent/60" : ""
         }`}
       >

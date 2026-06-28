@@ -10,10 +10,10 @@ import {
   Terminal,
 } from "lucide-react";
 
-function NavDivider() {
+function NavDivider({ className = "" }: { className?: string }) {
   return (
     <span
-      className="mx-1.5 h-6 w-px shrink-0 bg-aws-nav-border/80"
+      className={`mx-1.5 h-6 w-px shrink-0 bg-aws-nav-border/80 ${className}`}
       aria-hidden="true"
     />
   );
@@ -63,13 +63,15 @@ export default function TopNav() {
     <header className="flex h-12 shrink-0 items-center border-b border-aws-nav-border/60 bg-aws-nav">
       <div className="flex shrink-0 items-center">
         <AwsLogo />
-        <NavDivider />
-        <IconButton label="All services">
-          <Grid3x3 className="h-4 w-4" strokeWidth={1.75} />
-        </IconButton>
+        <NavDivider className="hidden sm:block" />
+        <span className="hidden sm:contents">
+          <IconButton label="All services">
+            <Grid3x3 className="h-4 w-4" strokeWidth={1.75} />
+          </IconButton>
+        </span>
       </div>
 
-      <div className="flex min-w-0 flex-1 justify-center px-3 lg:px-6">
+      <div className="flex min-w-0 flex-1 justify-center px-2 sm:px-3 lg:px-6">
         <div className="flex w-full max-w-[44rem] items-center rounded border border-aws-nav-border-strong/70 bg-[#0f1419] shadow-inner">
           <Search
             className="ml-2.5 h-3.5 w-3.5 shrink-0 text-aws-nav-text-muted"
@@ -95,26 +97,31 @@ export default function TopNav() {
         </div>
       </div>
 
-      <div className="flex shrink-0 items-center pr-2">
-        <IconButton label="CloudShell">
-          <Terminal className="h-4 w-4" strokeWidth={1.75} />
-        </IconButton>
-        <NavDivider />
+      <div className="flex shrink-0 items-center overflow-x-auto pr-2">
+        <span className="hidden md:contents">
+          <IconButton label="CloudShell">
+            <Terminal className="h-4 w-4" strokeWidth={1.75} />
+          </IconButton>
+          <NavDivider />
+        </span>
         <IconButton label="Notifications">
           <Bell className="h-4 w-4" strokeWidth={1.75} />
         </IconButton>
-        <NavDivider />
-        <IconButton label="Help">
-          <CircleHelp className="h-4 w-4" strokeWidth={1.75} />
-        </IconButton>
-        <NavDivider />
-        <IconButton label="Settings">
-          <Settings className="h-4 w-4" strokeWidth={1.75} />
-        </IconButton>
-        <NavDivider />
+        <NavDivider className="hidden sm:block" />
+        <span className="hidden lg:contents">
+          <IconButton label="Help">
+            <CircleHelp className="h-4 w-4" strokeWidth={1.75} />
+          </IconButton>
+          <NavDivider />
+          <IconButton label="Settings">
+            <Settings className="h-4 w-4" strokeWidth={1.75} />
+          </IconButton>
+          <NavDivider />
+        </span>
+        <NavDivider className="hidden sm:block" />
         <button
           type="button"
-          className="flex items-center gap-1 rounded px-2 py-1.5 text-ui text-aws-nav-text-body transition-colors hover:bg-aws-sidebar-hover"
+          className="hidden items-center gap-1 rounded px-2 py-1.5 text-ui text-aws-nav-text-body transition-colors hover:bg-aws-sidebar-hover sm:flex"
         >
           <span className="hidden max-w-24 truncate lg:inline">Global</span>
           <ChevronDown className="h-3.5 w-3.5 text-aws-nav-text-muted" />
