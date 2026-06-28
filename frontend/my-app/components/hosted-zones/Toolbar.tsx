@@ -9,10 +9,17 @@ const secondaryClass =
 
 type ToolbarProps = {
   selectedZoneId: number | null;
+  refreshing: boolean;
+  onRefresh: () => void;
   onDeleteClick: () => void;
 };
 
-export default function Toolbar({ selectedZoneId, onDeleteClick }: ToolbarProps) {
+export default function Toolbar({
+  selectedZoneId,
+  refreshing,
+  onRefresh,
+  onDeleteClick,
+}: ToolbarProps) {
   const router = useRouter();
   const disabled = selectedZoneId === null;
 
@@ -24,10 +31,12 @@ export default function Toolbar({ selectedZoneId, onDeleteClick }: ToolbarProps)
     >
       <button
         type="button"
-        className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-aws-main-border bg-transparent text-aws-link transition-colors hover:bg-aws-main-elevated"
+        onClick={onRefresh}
+        disabled={refreshing}
+        className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-aws-main-border bg-transparent text-aws-link transition-colors hover:bg-aws-main-elevated disabled:cursor-not-allowed disabled:opacity-60"
         aria-label="Refresh"
       >
-        <RefreshCw className="h-3.5 w-3.5" />
+        <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`} />
       </button>
 
       <button

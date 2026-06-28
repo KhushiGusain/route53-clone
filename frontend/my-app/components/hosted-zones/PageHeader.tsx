@@ -5,6 +5,8 @@ type PageHeaderProps = {
   totalCount: number;
   hasActiveFilter: boolean;
   selectedZoneId: number | null;
+  refreshing: boolean;
+  onRefresh: () => void;
   onDeleteClick: () => void;
 };
 
@@ -13,6 +15,8 @@ export default function PageHeader({
   totalCount,
   hasActiveFilter,
   selectedZoneId,
+  refreshing,
+  onRefresh,
   onDeleteClick,
 }: PageHeaderProps) {
   const countLabel = hasActiveFilter
@@ -33,7 +37,12 @@ export default function PageHeader({
             Automatic mode is the current search behavior optimized for best filter results.
           </p>
         </div>
-        <Toolbar selectedZoneId={selectedZoneId} onDeleteClick={onDeleteClick} />
+        <Toolbar
+          selectedZoneId={selectedZoneId}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          onDeleteClick={onDeleteClick}
+        />
       </div>
     </section>
   );

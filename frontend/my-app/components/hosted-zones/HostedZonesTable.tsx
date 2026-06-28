@@ -1,5 +1,6 @@
 "use client";
 
+import { Loader2 } from "lucide-react";
 import type { HostedZone } from "@/lib/types";
 
 const columns = [
@@ -19,16 +20,27 @@ const td =
 type HostedZonesTableProps = {
   zones: HostedZone[];
   selectedZoneId: number | null;
+  loading?: boolean;
   onSelectZone: (zoneId: number) => void;
 };
 
 export default function HostedZonesTable({
   zones,
   selectedZoneId,
+  loading = false,
   onSelectZone,
 }: HostedZonesTableProps) {
   return (
-    <section className="flex-1 overflow-x-auto">
+    <section className="relative flex-1 overflow-x-auto">
+      {loading && (
+        <div
+          className="absolute inset-0 z-10 flex items-center justify-center bg-aws-main/70"
+          aria-live="polite"
+          aria-busy="true"
+        >
+          <Loader2 className="h-6 w-6 animate-spin text-aws-link" />
+        </div>
+      )}
       <table className="w-full min-w-[860px] border-collapse text-left">
         <thead>
           <tr>
